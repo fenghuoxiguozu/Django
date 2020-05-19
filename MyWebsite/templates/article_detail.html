@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% block blog_detail %}
+
+
+
+
+<div class="ui segment">
+  <div class="ui breadcrumb">
+    <a class="section" href="{% url 'article_list' %}">主页</a>
+    <div class="divider"> / </div>
+    <a class="section">{{ article.title }}</a>
+  </div>
+  <div class="ui clearing divider"></div>
+
+  <div class="ui center aligned large header">{{ article.title }}</div>
+  <div class="ui clearing divider"></div>
+
+      <p>{{ article.content | safe }}</p>
+  <div class="ui clearing divider"></div>
+  <div>
+    {% if previous_article %}
+    <p>上一篇：{{ previous_article.title }}</p>
+    {% else %}
+    <p>上一篇：暂无</p>
+    {% endif %}
+    {% if next_article %}
+    <p>下一篇：{{ next_article.title }}</p>
+    {% else %}
+    <p>下一篇：暂无</p>
+    {% endif %}
+  </div>
+
+
+</div>
+{% endblock %}

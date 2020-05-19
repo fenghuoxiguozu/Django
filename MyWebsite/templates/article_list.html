@@ -1,0 +1,92 @@
+{% extends 'index.html' %}
+{% block blog_list %}
+
+<div class="twelve wide column">
+  <div class="ui items">
+    {% for article in articles %}
+    <div class="ui segment">
+      <div class="item" style="height: 125px;">
+        <div class="ui image" style="height: 125px;float: left;margin-right: 30px">
+          <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://qiniu.cuiqingcai.com/wp-content/uploads/2015/02/wallpaper_5254665-e1424499272248.jpg&h=123&w=200&q=90&zc=1&ct=1">
+        </div>
+        <div class="content">
+          <a class="ui teal header" href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+          <div class="meta">
+            <span>{{ article.published }}</span>
+          </div>
+          <div class="description">
+            <p>{{ article.content | truncatechars:150 | striptags }} </p>
+          </div>
+          <div class="extra" style="margin-top: 15px">
+            <span>{{ article.tagName.name }}</span>
+            <span>作者</span>
+            <span>阅读数</span>
+            <span>点赞数</span>
+            <span>评论数</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="ui container">
+  <div class="ui pagination menu">
+          {% if articles.has_previous %}
+      <a class="active item" href="?page={{ articles.previous_page_number }}">
+      <span> << </span>
+      </a>
+          {% endif %}
+
+          {% if articles.paginator.num_pages > 4 %}
+      <a class=" active item" href="?page=1">1</a>
+      <a class=" active item" href="?page=2">2</a>
+      <a class=" active item" href="?page=3">3</a>
+      <a class=" disabled item" >...</a>
+          {% endif %}
+
+      <a class="item" href="?page={{ articles.number }}">
+            {{ articles.number }}
+      </a>
+
+          {% if articles.has_next %}
+      <a class="active item" href="?page={{ articles.next_page_number }}">
+      <span> >> </span>
+          {% endif %}
+      </a>
+
+      <a class="item">
+          共 {{ articles.paginator.num_pages }} 页
+      </a>
+  </div>
+</div>
+
+</div>
+
+<div class="four wide column">
+  <div class="ui segments">
+    <h4 class="ui top attached block header">时间归档</h4>
+    {% for article_date,article_count in article_dates.items %}
+    <div class="ui segment">
+      <a href="{% url 'article_with_date' article_date.year article_date.month %}">
+      <p>{{ article_date | date:"Y年m月" }} ({{ article_count }})</p></a>
+    </div>
+    {% endfor %}
+ </div>
+
+  <div class="ui segments">
+    <h4 class="ui top attached block header">标签归档</h4>
+    {% for article_type in article_types %}
+    <div class="ui segment">
+      <a href="{% url 'article_with_type' article_type.pk %}">
+      <p>{{ article_type.name }} ({{ article_type.type_count }})</p></a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+
+  
+{% endblock %}

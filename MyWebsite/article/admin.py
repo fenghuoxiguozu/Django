@@ -16,3 +16,4 @@ class ArticleAdmin():
 
 xadmin.site.register(Article,ArticleAdmin)
 xadmin.site.register(Tag)
+xadmin.site.register(ReadNum)

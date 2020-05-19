@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/semantic.js' %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+</head>
+<body style="background-color: #E8E8E8">
+
+<div class="ui stackable grid container">
+  <div class="row">
+    <div class="ui secondary  menu">
+      <a class="item">
+        主页
+      </a>
+      <a class="item active">
+        信息
+      </a>
+      <a class="item">
+        朋友
+      </a>
+      <div class="right menu">
+        <div class="item">
+          <div class="ui icon input">
+            <input type="text" placeholder="搜索...">
+            <i class="search link icon"></i>
+          </div>
+        </div>
+        <a class="ui item">
+          退出
+        </a>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+
+    {% block blog_list %}{% endblock %}
+    {% block blog_detail %}{% endblock %}
+
+
+
+  </div>
+</div>
+
+</body>
+</html>

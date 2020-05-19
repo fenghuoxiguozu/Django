@@ -22,5 +22,18 @@ class Article(models.Model):
 
     class Meta:
         db_table = 'Article'
-        verbose_name = '文章'
-        verbose_name_plural = '文章'
+        verbose_name = '文章详情'
+        verbose_name_plural = '文章详情'
+
+    def __str__(self):
+        return self.title
+
+
+class ReadNum(models.Model):
+    read_num = models.IntegerField(default=0)
+    article = models.OneToOneField(Article,on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'ReadNum'
+        verbose_name = '文章阅读量'
+        verbose_name_plural = '文章阅读量'
