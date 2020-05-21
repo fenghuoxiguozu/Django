@@ -1,10 +1,10 @@
-{% extends 'index.html' %}
+{% extends 'base.html' %}
 {% block blog_detail %}
 
 
 
 
-<div class="ui segment">
+<div class="ui raised very padded text container segment">
   <div class="ui breadcrumb">
     <a class="section" href="{% url 'article_list' %}">主页</a>
     <div class="divider"> / </div>
@@ -32,5 +32,58 @@
   </div>
 
 
+  <div class="ui divider"></div>
+  {{ user }}
+  <form action="{% url 'submitComment' %}" method="POST" class="ui reply form">
+    {% csrf_token %}
+    {{ comment_form }}
+  </form>
+  <div class="ui divider"></div>
+
+  <div class="ui comments">
+  <h3 class="ui dividing header">评论</h3>
+    {% for com in comments %}
+    <div class="comment">
+      <a class="avatar">
+        <img src="../images/avatar/small/elliot.jpg">
+      </a>
+      <div class="content">
+        <a class="author">{{ user }}</a>
+        <div class="metadata">
+          <span class="date">{{ com.commentTime | date:"Y-m-d H:i:s" }}</span>
+        </div>
+        <div class="text">
+          <p>{{ com.commentText }}</p>
+        </div>
+        <div class="actions">
+          <a class="reply">Reply</a>
+        </div>
+      </div>
+      <div class="comments">
+        <div class="comment">
+          <a class="avatar">
+            <img src="../images/avatar/small/jenny.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Jenny Hess</a>
+            <div class="metadata">
+              <span class="date">Just now</span>
+            </div>
+            <div class="text">
+              Elliot you are always so right :)
+            </div>
+            <div class="actions">
+              <a class="reply">Reply</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <p>暂无</p>
+    {% endfor %}
+  </div>
 </div>
+
+
 {% endblock %}

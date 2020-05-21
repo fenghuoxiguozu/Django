@@ -1,9 +1,12 @@
 from django.shortcuts import render,get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Count
+from django.contrib.contenttypes.models import ContentType
 from .models import *
 from read.utils import add_readNum
-# Create your views here.
+from comment.models import Comment
+from .forms import CommentForm
+
 
 def public_article_list(request,articles):
     context = {}
@@ -53,6 +56,15 @@ def article_detail(request,article_id):
     context['previous_article'] = Article.objects.filter(published__lt=article.published).order_by('published').last()
     context['next_article'] = Article.objects.filter(published__gt=article.published).order_by('published').first()
 
+    article_content_type = ContentType.objects.get_for_model(article)
+    comments = Comment.objects.filter(content_type=article_content_type, object_id=article.pk)
+    context['comments'] = comments
+
+    context['comment_form'] = CommentForm(
+        initial={'content_type':article_content_type,'object_id':article_id})
+
     response = render(request,'article_detail.html',context)
     response.set_cookie(key,'true')
+
+
     return response
