@@ -17,11 +17,12 @@ import xadmin
 from django.urls import path,include
 from django.conf import settings
 from django.conf.urls.static import  static
-
+from .views import index
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('ckeditor',include('ckeditor_uploader.urls')),
+    path('index',index,name='index'),
     path('article/', include('article.urls'))
 ]
 

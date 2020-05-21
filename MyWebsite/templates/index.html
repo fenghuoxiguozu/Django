@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/semantic.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 </head>
@@ -15,11 +16,11 @@
 <div class="ui stackable grid container">
   <div class="row">
     <div class="ui secondary  menu">
-      <a class="item">
+      <a class="item" href="{% url 'index' %}">
         主页
       </a>
-      <a class="item active">
-        信息
+      <a class="item active" href="{% url 'article_list' %}">
+        文章
       </a>
       <a class="item">
         朋友
@@ -40,6 +41,7 @@
   </div>
   <div class="row">
 
+    {% block chart %}{% endblock %}
     {% block blog_list %}{% endblock %}
     {% block blog_detail %}{% endblock %}
 
@@ -50,3 +52,10 @@
 
 </body>
 </html>
+
+<script>
+  $('.menu .item')
+  .tab()
+;
+
+</script>

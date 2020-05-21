@@ -13,6 +13,7 @@
   <div class="ui clearing divider"></div>
 
   <div class="ui center aligned large header">{{ article.title }}</div>
+  <span>阅读数{{ article.get_read_num }}</span>
   <div class="ui clearing divider"></div>
 
       <p>{{ article.content | safe }}</p>

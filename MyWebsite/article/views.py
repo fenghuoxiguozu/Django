@@ -2,6 +2,7 @@ from django.shortcuts import render,get_object_or_404
 from django.core.paginator import Paginator
 from django.db.models import Count
 from .models import *
+from read.utils import add_readNum
 # Create your views here.
 
 def public_article_list(request,articles):
@@ -46,8 +47,12 @@ def article_with_date(request,year,month):
 def article_detail(request,article_id):
     context={}
     article = get_object_or_404(Article,id=article_id)
+    key = add_readNum(request,article)
+
     context['article'] = article
     context['previous_article'] = Article.objects.filter(published__lt=article.published).order_by('published').last()
     context['next_article'] = Article.objects.filter(published__gt=article.published).order_by('published').first()
 
-    return render(request,'article_detail.html',context)
+    response = render(request,'article_detail.html',context)
+    response.set_cookie(key,'true')
+    return response

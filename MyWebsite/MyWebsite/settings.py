@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'article',
+    'read',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,11 @@ CKEDITOR_CONFIGS={
         'resize_enable':False,
     }
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table', # 数据库表
+    }
+}
+# python manage.py createcachetable

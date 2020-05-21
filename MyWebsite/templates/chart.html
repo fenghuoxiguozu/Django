@@ -1,0 +1,185 @@
+{% extends 'index.html'%}
+
+{% block chart %}
+
+<div class="ui placeholder segment">
+  <div class="ui two column stackable center aligned grid">
+    <div class="ui vertical divider"></div>
+    <div class="middle aligned row">
+      <div class="column">
+        <div id="main" style="width: 600px;height:400px;"></div>
+      </div>
+      <div class="column">
+        <div class="ui pointing secondary menu" style="width: 500px">
+          <a class="item active" data-tab="first">近3日阅读量</a>
+          <a class="item" data-tab="second">近7日阅读量</a>
+          <a class="item" data-tab="third">近30日阅读量</a>
+        </div>
+        <div class="ui bottom attached tab segment active" data-tab="first">
+          <div class="ui middle aligned animated list">
+            {% for article in three_hot_articles %}
+            <div class="item">
+              <div class="right floated content">
+                <span>{{ article.published }}</span>
+              </div>
+              <div class="content">
+                <div class="header">
+                  <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+                </div>
+              </div>
+            <div class="ui inverted divider"></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="second">
+          <div class="ui middle aligned animated list">
+            {% for article in seven_hot_articles %}
+            <div class="item">
+              <div class="right floated content">
+                <span>{{ article.published }}</span>
+              </div>
+              <div class="content">
+                <div class="header">
+                  <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+                </div>
+              </div>
+            <div class="ui inverted divider"></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="third">
+          <div class="ui middle aligned animated list">
+            {% for article in thirty_hot_articles %}
+            <div class="item">
+              <div class="right floated content">
+                <span>{{ article.published }}</span>
+              </div>
+              <div class="content">
+                <div class="header">
+                  <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+                </div>
+              </div>
+            <div class="ui inverted divider"></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+var myChart = echarts.init(document.getElementById("main"));
+var option = {
+  title: {
+    text: '折线图标题',
+    link: '',
+    target: 'blank',
+    left: '5%',
+    textStyle: {
+      color: '#fff',
+      fontSize: 15,
+      bottom: 0
+    }
+    },
+  backgroundColor: 'rgba(255,255,255,0.8)',
+  xAxis: {
+    type: 'category',
+    data: {{ dates_list | safe }},
+    //name: '日期',
+    position: 'bottom',
+			// 等同于 axisLine: true    开始
+    axisLine: {
+      show: false
+    },
+    axisTick: {
+      show: false
+    },
+    // 等同于 axisLine: true    结束
+    axisLabel: {
+      color: 'black',
+      fontSize: 12
+    },
+  },
+  yAxis: {
+    splitNumber: 5,
+    axisLine: {
+      show: false
+    },
+    axisTick: {
+      show: false
+    },
+    splitLine: {
+      show: true,
+      lineStyle: {
+        color: '#fff',
+        opacity: 0.2
+      }
+			},
+			axisLabel: {
+				color: 'black',
+				fontSize: 12
+			},
+      type: 'value',
+      name:'阅读量',
+  },
+  series : [{
+    name : '情报量',
+    type : 'line',
+    stack : '总量',
+    smooth:true,    //曲线平滑
+    itemStyle : {
+      normal : {
+        areaStyle : {
+          type : 'default',
+            //渐变色实现
+          color : new echarts.graphic.LinearGradient(0, 0, 0, 1,
+          [{
+            offset : 0,
+              color : '#3ebf9b'
+            }, {
+              offset : 0.5,
+              color : '#267268'
+            }, {
+              offset : 1,
+              color : '#14323f'
+            }
+            ]),
+        },
+        lineStyle : {  //线的颜色
+          color : '#349e85'
+        },
+
+        label: {
+                show: true,
+                position: 'top',
+                textStyle: {
+                  color: 'black',
+                }
+        }
+        },
+        },
+    symbolSize:15,
+    areaStyle : {},
+    data : {{ read_nums }}
+  }]
+};
+myChart.setOption(option);
+
+</script>
+
+{% endblock %}

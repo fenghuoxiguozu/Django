@@ -4,7 +4,7 @@
 <div class="twelve wide column">
   <div class="ui items">
     {% for article in articles %}
-    <div class="ui segment">
+    <div class="ui raised segment">
       <div class="item" style="height: 125px;">
         <div class="ui image" style="height: 125px;float: left;margin-right: 30px">
           <img src="https://cuiqingcai.com/wp-content/themes/Yusi/timthumb.php?src=https://qiniu.cuiqingcai.com/wp-content/uploads/2015/02/wallpaper_5254665-e1424499272248.jpg&h=123&w=200&q=90&zc=1&ct=1">
@@ -20,7 +20,7 @@
           <div class="extra" style="margin-top: 15px">
             <span>{{ article.tagName.name }}</span>
             <span>作者</span>
-            <span>阅读数</span>
+            <span>阅读数{{ article.get_read_num }}</span>
             <span>点赞数</span>
             <span>评论数</span>
           </div>

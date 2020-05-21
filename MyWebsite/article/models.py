@@ -1,5 +1,7 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
+from read.models import ReadNumMethod,ReadDetail
+from django.contrib.contenttypes.fields import GenericRelation
 
 # Create your models here.
 class Tag(models.Model):
@@ -14,11 +16,12 @@ class Tag(models.Model):
         return self.name
 
 
-class Article(models.Model):
+class Article(models.Model,ReadNumMethod):
     title = models.CharField(max_length=100)
     content = RichTextUploadingField()
     published = models.DateField(auto_now_add=True)
     tagName = models.ManyToManyField('Tag')
+    read_details = GenericRelation(ReadDetail)
 
     class Meta:
         db_table = 'Article'
@@ -29,11 +32,5 @@ class Article(models.Model):
         return self.title
 
 
-class ReadNum(models.Model):
-    read_num = models.IntegerField(default=0)
-    article = models.OneToOneField(Article,on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'ReadNum'
-        verbose_name = '文章阅读量'
-        verbose_name_plural = '文章阅读量'
+

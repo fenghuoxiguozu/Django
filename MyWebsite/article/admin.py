@@ -5,7 +5,7 @@ class ArticleAdmin():
     def all_tags(self, obj):
         return [bt.name for bt in obj.tagName.all()]
     #需要显示的字段
-    list_display = ['id','title','published','content','all_tags']
+    list_display = ['id','title','published','content','all_tags','get_read_num']
     # 可以用来做搜索条件的字段
     search_fields = ['title',]
     #用时间格式做过滤条件的字段
@@ -16,4 +16,3 @@ class ArticleAdmin():
 
 xadmin.site.register(Article,ArticleAdmin)
 xadmin.site.register(Tag)
-xadmin.site.register(ReadNum)
