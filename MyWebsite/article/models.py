@@ -25,7 +25,7 @@ class Article(models.Model,ReadNumMethod):
 
     class Meta:
         db_table = 'Article'
-        verbose_name = '文章详情'
+        verbose_name = 'Article'
         verbose_name_plural = '文章详情'
 
     def __str__(self):

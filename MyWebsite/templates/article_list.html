@@ -11,14 +11,20 @@
         </div>
         <div class="content">
           <a class="ui teal header" href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
-          <div class="meta">
-            <span>{{ article.published }}</span>
+          <div >
+
+
           </div>
           <div class="description">
             <p>{{ article.content | truncatechars:150 | striptags }} </p>
           </div>
+          <div class="meta">
+            {% for tag in article.tagName.all %}
+            <a class="ui orange  tag label">{{ tag }}</a>
+            {% endfor %}
+          </div>
           <div class="extra" style="margin-top: 15px">
-            <span>{{ article.tagName.name }}</span>
+            <span>{{ article.published }}</span>
             <span>作者</span>
             <span>阅读数{{ article.get_read_num }}</span>
             <span>点赞数</span>

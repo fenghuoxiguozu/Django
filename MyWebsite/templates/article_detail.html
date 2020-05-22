@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+{% block header %}
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+{% endblock %}
+
 {% block blog_detail %}
 
 
@@ -33,16 +39,33 @@
 
 
   <div class="ui divider"></div>
-  {{ user }}
-  <form action="{% url 'submitComment' %}" method="POST" class="ui reply form">
+{#  {{ user }}#}
+  {% if user.is_authenticated %}
+  <form action="{% url 'submitComment' %}" method="POST" class="ui reply form" id="comment">
     {% csrf_token %}
-    {{ comment_form }}
+    {% for field in comment_form %}
+        {{ field }}
+    {% endfor %}
+    <div>
+      <input type="submit" value="发表" class="ui large blue horizontal label">
+      <a id="comment_error" class="ui sub disabled red header"></a>
+    </div>
   </form>
-  <div class="ui divider"></div>
+  {% else %}
+    参与评论，请先
+  <div class="ui mini buttons">
+    <button class="ui button"><a href="{% url 'login' %}">登录</a></button>
+    <div class="or"></div>
+    <button class="ui button"><a href="{% url 'register' %}">注册</a></button>
+  </div>
+  {% endif %}
+  <div class="ui hidden divider"></div>
 
-  <div class="ui comments">
-  <h3 class="ui dividing header">评论</h3>
-    {% for com in comments %}
+  <h3 class="ui dividing header" >评论</h3>
+  <div class="ui comments" id="comment_list">
+
+{#    <div >#}
+    {% for comment in comments %}
     <div class="comment">
       <a class="avatar">
         <img src="../images/avatar/small/elliot.jpg">
@@ -50,40 +73,83 @@
       <div class="content">
         <a class="author">{{ user }}</a>
         <div class="metadata">
-          <span class="date">{{ com.commentTime | date:"Y-m-d H:i:s" }}</span>
+          <span class="date">{{ comment.commentTime | date:"Y-m-d H:i:s" }}</span>
         </div>
         <div class="text">
-          <p>{{ com.commentText }}</p>
+          <p>{{ comment.commentText|safe }}</p>
         </div>
         <div class="actions">
           <a class="reply">Reply</a>
         </div>
       </div>
+
+
+
+
       <div class="comments">
+        {% for reply in comment.root_comment.all %}
         <div class="comment">
           <a class="avatar">
             <img src="../images/avatar/small/jenny.jpg">
           </a>
           <div class="content">
-            <a class="author">Jenny Hess</a>
+            <a class="author">Jenny Hess 回复：{{ reply.user.username }}</a>
             <div class="metadata">
-              <span class="date">Just now</span>
+              <span class="date">{{ reply.commentTime | date:"Y-m-d H:i:s"}}</span>
             </div>
             <div class="text">
-              Elliot you are always so right :)
+              {{ reply | safe }}
             </div>
             <div class="actions">
               <a class="reply">Reply</a>
             </div>
           </div>
         </div>
+          {% endfor %}
       </div>
     </div>
     {% empty %}
     <p>暂无</p>
     {% endfor %}
+{#    </div>#}
   </div>
 </div>
 
 
+{% endblock %}
+
+
+{% block comment_script %}
+
+<script>
+$('#comment').submit(function () {
+
+  $("#comment_error").text('');
+  if(CKEDITOR.instances["id_commentText"].document.getBody().getText().trim()==''){
+      $("#comment_error").text('评论内容不能为空');
+      //return false;
+  }
+  CKEDITOR.instances['id_commentText'].updateElement();
+  $.ajax({
+    url:"{% url 'submitComment' %}",
+    type:'POST',
+    cache: false,
+    data:$(this).serialize(),
+    success:function (data) {
+      console.log("正确返回",data);
+      if (data['status']=="SUCCESS"){
+        var comment_html = '<div class="comment"><a class="avatar">  <img src="../images/avatar/small/elliot.jpg"></a><div class="content">  <a class="author">'+ data['user'] +'</a>  <div class="metadata">    <span class="date">'+ data['commentTime'] +'</span>  </div>  <div class="text">    <p>'+ data['commentText'] +'</p>  </div>  <div class="actions">    <a class="reply">Reply</a>  </div></div><div class="comments">  <div class="comment">    <a class="avatar"><img src="../images/avatar/small/jenny.jpg">    </a>    <div class="content"><a class="author">Jenny Hess</a><div class="metadata">  <span class="date">Just now</span></div><div class="text">  Elliot you are always so right</div><div class="actions">  <a class="reply">Reply</a></div>    </div>  </div></div>    </div>';
+        console.log(comment_html);
+        $('#comment_list').prepend(comment_html);
+        $('#cke_1_contents').val('');
+      }
+    },
+    error:function (xhr) {
+      console.log("错误返回",xhr)
+    },
+  });
+  return false
+});
+
+</script>
 {% endblock %}

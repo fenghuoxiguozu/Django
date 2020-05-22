@@ -57,7 +57,7 @@ def article_detail(request,article_id):
     context['next_article'] = Article.objects.filter(published__gt=article.published).order_by('published').first()
 
     article_content_type = ContentType.objects.get_for_model(article)
-    comments = Comment.objects.filter(content_type=article_content_type, object_id=article.pk)
+    comments = Comment.objects.filter(content_type=article_content_type, object_id=article.pk,parent=None)
     context['comments'] = comments
 
     context['comment_form'] = CommentForm(

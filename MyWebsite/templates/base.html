@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="{% static 'js/semantic.js' %}"></script>
-    <script src="{% static 'js/echarts.min.js' %}"></script>
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+  {% block header %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/semantic.css' %}">
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/semantic.js' %}"></script>
+  <script src="{% static 'js/echarts.min.js' %}"></script>
+  <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+  <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 </head>
 <body style="background-color: #E8E8E8">
 
@@ -62,9 +63,12 @@
 </body>
 </html>
 
-<script>
-  $('.menu .item')
-  .tab()
-;
 
-</script>
+{% block comment_script %}{% endblock %}
+{% block hot_blog %}{% endblock %}
+{#<script>#}
+{#  $('.menu .item')#}
+{#  .tab()#}
+{#;#}
+{##}
+{#</script>#}
