@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from .models import *
 from read.utils import add_readNum
 from comment.models import Comment
-from .forms import CommentForm
 
 
 def public_article_list(request,articles):
@@ -56,13 +55,9 @@ def article_detail(request,article_id):
     context['previous_article'] = Article.objects.filter(published__lt=article.published).order_by('published').last()
     context['next_article'] = Article.objects.filter(published__gt=article.published).order_by('published').first()
 
-    article_content_type = ContentType.objects.get_for_model(article)
-    comments = Comment.objects.filter(content_type=article_content_type, object_id=article.pk,parent=None)
-    context['comments'] = comments
-
-    context['comment_form'] = CommentForm(
-        initial={'content_type':article_content_type,'object_id':article_id})
-
+    # article_content_type = ContentType.objects.get_for_model(article)
+    # context['comments'] = Comment.objects.filter(content_type=article_content_type, object_id=article.pk,parent=None)
+    # context['comment_form'] = CommentForm(initial={'content_type':article_content_type,'object_id':article_id,'reply_id':0})
     response = render(request,'article_detail.html',context)
     response.set_cookie(key,'true')
 

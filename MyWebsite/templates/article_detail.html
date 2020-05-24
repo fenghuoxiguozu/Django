@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load comment_tags %}
 {% block header %}
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
@@ -20,18 +21,19 @@
 
   <div class="ui center aligned large header">{{ article.title }}</div>
   <span>阅读数{{ article.get_read_num }}</span>
+  <span>评论数{% comment_counts article %}</span>
   <div class="ui clearing divider"></div>
 
       <p>{{ article.content | safe }}</p>
   <div class="ui clearing divider"></div>
   <div>
     {% if previous_article %}
-    <p>上一篇：{{ previous_article.title }}</p>
+    <div>上一篇：<a href="{% url 'article_detail' previous_article.id%}">{{ previous_article.title }}</a></span>
     {% else %}
     <p>上一篇：暂无</p>
     {% endif %}
     {% if next_article %}
-    <p>下一篇：{{ next_article.title }}</p>
+    <div>下一篇：<a href="{% url 'article_detail' next_article.id%}">{{ next_article.title }}</a></div>
     {% else %}
     <p>下一篇：暂无</p>
     {% endif %}
@@ -39,11 +41,12 @@
 
 
   <div class="ui divider"></div>
-{#  {{ user }}#}
   {% if user.is_authenticated %}
   <form action="{% url 'submitComment' %}" method="POST" class="ui reply form" id="comment">
     {% csrf_token %}
-    {% for field in comment_form %}
+{#    {% for field in comment_form %}#}
+    {% comment_form article as cf %}
+    {%  for field in cf %}
         {{ field }}
     {% endfor %}
     <div>
@@ -64,14 +67,15 @@
   <h3 class="ui dividing header" >评论</h3>
   <div class="ui comments" id="comment_list">
 
-{#    <div >#}
+{#    {% for comment in comments %}#}
+    {% comment_list article as comments %}
     {% for comment in comments %}
-    <div class="comment">
+    <div class="comment" id="root_{{ comment.pk }}">
       <a class="avatar">
         <img src="../images/avatar/small/elliot.jpg">
       </a>
       <div class="content">
-        <a class="author">{{ user }}</a>
+        <a class="author">{{ comment.user.username }}</a>
         <div class="metadata">
           <span class="date">{{ comment.commentTime | date:"Y-m-d H:i:s" }}</span>
         </div>
@@ -79,21 +83,18 @@
           <p>{{ comment.commentText|safe }}</p>
         </div>
         <div class="actions">
-          <a class="reply">Reply</a>
+          <a class="reply" href="javascript:reply({{ comment.pk }});">Reply</a>
         </div>
       </div>
 
-
-
-
-      <div class="comments">
+      <div class="comments" id="child_{{ comment.pk }}">
         {% for reply in comment.root_comment.all %}
         <div class="comment">
           <a class="avatar">
             <img src="../images/avatar/small/jenny.jpg">
           </a>
           <div class="content">
-            <a class="author">Jenny Hess 回复：{{ reply.user.username }}</a>
+            <a class="author"> {{ reply.user.username }}  回复：{{ reply.reply_to.username }}</a>
             <div class="metadata">
               <span class="date">{{ reply.commentTime | date:"Y-m-d H:i:s"}}</span>
             </div>
@@ -101,7 +102,7 @@
               {{ reply | safe }}
             </div>
             <div class="actions">
-              <a class="reply">Reply</a>
+              <a class="reply" href="javascript:reply({{ reply.pk }});">Reply</a>
             </div>
           </div>
         </div>
@@ -120,10 +121,8 @@
 
 
 {% block comment_script %}
-
 <script>
 $('#comment').submit(function () {
-
   $("#comment_error").text('');
   if(CKEDITOR.instances["id_commentText"].document.getBody().getText().trim()==''){
       $("#comment_error").text('评论内容不能为空');
@@ -136,12 +135,19 @@ $('#comment').submit(function () {
     cache: false,
     data:$(this).serialize(),
     success:function (data) {
-      console.log("正确返回",data);
       if (data['status']=="SUCCESS"){
-        var comment_html = '<div class="comment"><a class="avatar">  <img src="../images/avatar/small/elliot.jpg"></a><div class="content">  <a class="author">'+ data['user'] +'</a>  <div class="metadata">    <span class="date">'+ data['commentTime'] +'</span>  </div>  <div class="text">    <p>'+ data['commentText'] +'</p>  </div>  <div class="actions">    <a class="reply">Reply</a>  </div></div><div class="comments">  <div class="comment">    <a class="avatar"><img src="../images/avatar/small/jenny.jpg">    </a>    <div class="content"><a class="author">Jenny Hess</a><div class="metadata">  <span class="date">Just now</span></div><div class="text">  Elliot you are always so right</div><div class="actions">  <a class="reply">Reply</a></div>    </div>  </div></div>    </div>';
-        console.log(comment_html);
-        $('#comment_list').prepend(comment_html);
-        $('#cke_1_contents').val('');
+        currentTime = data['commentTime']
+        console.log(currentTime)
+        if($('#reply_id').val()=='0'){
+          var comment_html = '<div class="comment" id="root_'+data['pk']+'"><a class="avatar"><img src=""></a><div class="content"><a class="author">'+ data['user'] +'</a><div class="metadata"><span class="date">'+ data['commentTime'] +'</span></div><div class="text"><p>'+ data['commentText'] +'</p></div><div class="actions"><a class="reply" href="javascript:reply('+data['pk']+');">Reply</a></div></div><div class="comments" id="child_'+data['pk']+'"></div></div>';
+          $('#comment_list').prepend(comment_html);
+        }else {
+          var reply_html =   '<div class="comment"><a class="avatar"><img src=""></a><div class="content"><a class="author">'+data['user']+' 回复：'+data['reply_to']+'</a><div class="metadata"><span class="date">'+ data['commentTime'] +'</span></div><div class="text">'+ data['commentText'] +'</div><div class="actions"><a class="reply" href="javascript:reply('+data['pk']+');">Reply</a></div></div></div>';
+          var jq_id = "#child_"+data['root_pk'];
+          $(jq_id).append(reply_html);
+        }
+        // 清空编辑框的内容
+      CKEDITOR.instances['id_commentText'].setData('');
       }
     },
     error:function (xhr) {
@@ -151,5 +157,26 @@ $('#comment').submit(function () {
   return false
 });
 
+function reply(reply_id) {
+  $('#reply_id').val(reply_id);
+  $('html').animate({scrollTop:$('#comment').offset().top-30},function () {
+    CKEDITOR.instances["id_commentText"].focus()
+  })
+}
+
+function likeChange() {
+  $.ajax({
+    url:"{% url 'likeChange' %}",
+    type:'GET',
+    cache: false,
+    data:$(this).serialize(),
+  });
+}
 </script>
 {% endblock %}
+
+
+
+
+
+

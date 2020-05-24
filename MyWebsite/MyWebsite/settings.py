@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'article',
     'read',
     'comment',
+    'like',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +71,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'comment_tags': 'comment.template_tags.comment_tags',
+            },
         },
+
     },
 ]
 
@@ -122,7 +127,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

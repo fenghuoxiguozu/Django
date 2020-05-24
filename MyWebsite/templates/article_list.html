@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load comment_tags %}
+
 {% block blog_list %}
 
 <div class="twelve wide column">
@@ -20,7 +22,7 @@
           </div>
           <div class="meta">
             {% for tag in article.tagName.all %}
-            <a class="ui orange  tag label">{{ tag }}</a>
+            <a class="ui orange  tag label" href="{% url 'article_with_type' tag.pk %}">{{ tag }}</a>
             {% endfor %}
           </div>
           <div class="extra" style="margin-top: 15px">
@@ -28,7 +30,7 @@
             <span>作者</span>
             <span>阅读数{{ article.get_read_num }}</span>
             <span>点赞数</span>
-            <span>评论数</span>
+            <span>评论数{% comment_counts article %}</span>
           </div>
         </div>
       </div>

@@ -2,12 +2,16 @@ from django import forms
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import ObjectDoesNotExist
 from ckeditor.widgets import CKEditorWidget
+from comment.models import Comment
 
 class CommentForm(forms.Form):
     content_type = forms.CharField(widget=forms.HiddenInput)
     object_id = forms.IntegerField(widget=forms.HiddenInput)
     commentText = forms.CharField(widget=CKEditorWidget(config_name='comment_ckeditor'),
                                   error_messages={"required":"评论内容不为空"})
+    reply_id = forms.IntegerField(widget=forms.HiddenInput(attrs={"id":"reply_id"}))
+
+
 
     def __init__(self,*args,**kwargs):
         if 'user' in kwargs:
@@ -29,5 +33,14 @@ class CommentForm(forms.Form):
         except ObjectDoesNotExist:
             raise forms.ValidationError("评论对象不存在")
         self.cleaned_data['content_object'] = model_object
-
         return self.cleaned_data
+
+    def clean_reply_id(self):
+        reply_id = self.cleaned_data['reply_id']
+        if reply_id == 0:
+            self.cleaned_data['parent'] = None
+        elif Comment.objects.filter(pk=reply_id).exists():
+            self.cleaned_data['parent'] = Comment.objects.get(pk=reply_id)
+        else:
+            raise forms.ValidationError('回复出错')
+        return reply_id
