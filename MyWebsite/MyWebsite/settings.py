@@ -72,7 +72,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
             'libraries': {
-                'comment_tags': 'comment.template_tags.comment_tags',
+                'comment_tags': 'comment.template_tags.comment_tags'
+                # 'like_tags': 'like.template_tags.like_tags'
+
             },
         },
 

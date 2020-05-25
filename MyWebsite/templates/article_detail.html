@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load comment_tags %}
+
 {% block header %}
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
@@ -22,13 +23,37 @@
   <div class="ui center aligned large header">{{ article.title }}</div>
   <span>阅读数{{ article.get_read_num }}</span>
   <span>评论数{% comment_counts article %}</span>
+  <span>点赞数{% like_counts article %}</span>
   <div class="ui clearing divider"></div>
 
       <p>{{ article.content | safe }}</p>
   <div class="ui clearing divider"></div>
+
+  <div class="ui labeled button" tabindex="0" onclick="likeChange(this,'article',{{ article.pk }})">
+    <div class="ui red button">
+      {% like_status article as status%}
+      {% if status == 'active' %}
+      <i class="heart icon"></i> <span class="{{ status }}">已点赞</span>
+      {% else %}
+        <i class="heart icon"></i> <span class="{{ status }}">点赞</span>
+      {% endif %}
+    </div>
+    <a class="ui basic red left pointing label">
+      {% like_counts article %}
+    </a>
+  </div>
+  <div class="ui labeled button" tabindex="0">
+    <div class="ui basic blue button">
+      <i class="fork icon"></i> 分享
+    </div>
+    <a class="ui basic left pointing blue label">
+      1,048
+    </a>
+  </div>
+
   <div>
     {% if previous_article %}
-    <div>上一篇：<a href="{% url 'article_detail' previous_article.id%}">{{ previous_article.title }}</a></span>
+    <div>上一篇：<a href="{% url 'article_detail' previous_article.id%}">{{ previous_article.title }}</a></div>
     {% else %}
     <p>上一篇：暂无</p>
     {% endif %}
@@ -164,14 +189,38 @@ function reply(reply_id) {
   })
 }
 
-function likeChange() {
+function likeChange(obj,content_type,object_id) {
+  ele = obj.getElementsByClassName('active');
+  var is_like = ele.length == 0;
   $.ajax({
     url:"{% url 'likeChange' %}",
     type:'GET',
     cache: false,
-    data:$(this).serialize(),
+    data:{
+      content_type:content_type,
+      object_id:object_id,
+      is_like:is_like
+    },
+    success:function (data) {
+      var element = $(obj.getElementsByTagName('span'));
+      if(is_like){
+          element.addClass('active');
+          element.text('已点赞')
+      }else{
+          element.removeClass('active');
+          element.text('点赞')
+      }
+      var liked_num = $(obj.getElementsByTagName('a'));
+      liked_num.text(data['like_num']);
+    },
+    error:function (xhr) {
+      console.log(xhr)
+    }
   });
 }
+
+
+
 </script>
 {% endblock %}
 
