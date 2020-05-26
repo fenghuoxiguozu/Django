@@ -1,6 +1,6 @@
 from django import forms
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate,get_user_model
+User = get_user_model()
 
 
 class LoginForm(forms.Form):
@@ -47,3 +47,21 @@ class RegisterForm(forms.Form):
         if password != password_again:
             raise forms.ValidationError("两次输入的密码不一致")
         return password_again
+
+
+class NicknameForm(forms.Form):
+    nickname_new = forms.CharField(label="昵称",required=True,
+       widget=forms.TextInput(attrs={'placeholder':'请输入新昵称'}))
+
+    def clean_nickname_new(self):
+        nickname_new = self.cleaned_data.get('nickname_new','').strip()
+        if nickname_new == '':
+            raise forms.ValidationError('内容不能为空')
+        return nickname_new
+
+
+class EmailForm(forms.Form):
+    email = forms.EmailField(label="邮箱",required=True,
+       widget=forms.EmailInput(attrs={'placeholder':'请输入邮箱'}))
+    verify_code = forms.CharField(label="",required=True,
+      widget=forms.TextInput(attrs={"placeholder":"点击发送验证码"}))

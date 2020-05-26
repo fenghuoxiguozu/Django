@@ -14,61 +14,65 @@
 </head>
 <body style="background-color: #E8E8E8">
 
-<div class="ui stackable grid container">
-  <div class="row">
-    <div class="ui secondary  menu">
-      <a class="item" href="{% url 'index' %}">
-        主页
-      </a>
-      <a class="item active" href="{% url 'article_list' %}">
-        文章
-      </a>
-      <a class="item">
-        朋友
-      </a>
-      <div class="right menu">
-        <div class="item">
-          {% if user.is_authenticated %}
-          <a>{{ user }}</a>
-          {% else %}
-          <a  href="{% url 'login' %}?from={{ request.get_full_path }}">
-            登录
-          </a>
-          {% endif %}
-          <div class="ui icon input">
-            <input type="text" placeholder="搜索...">
-            <i class="search link icon"></i>
-          </div>
-        </div>
-        <a class="ui item">
-          退出
-        </a>
-      </div>
+<div class="ui stackable container menu" style="width: 100%;height: 60px">
+  <a class="item" style="width: 10%"></a>
+  <a class="item" href="{% url 'index' %}">&nbsp;&nbsp;主&nbsp;&nbsp;页&nbsp;&nbsp;</a>
+  <a class="item" href="{% url 'article_list' %}">&nbsp;&nbsp;文&nbsp;&nbsp;章&nbsp;&nbsp;</a>
+  <a class="item">&nbsp;&nbsp;专&nbsp;&nbsp;题&nbsp;&nbsp;</a>
+  <a class="item" style="margin-left: 15%">
+    <div class="ui icon small input">
+      <input type="text" placeholder="搜索...">
+      <i class="inverted circular search link icon"></i>
     </div>
-
-  </div>
-  <div class="row">
-
-    {% block login %}{% endblock %}
-    {% block register %}{% endblock %}
-    {% block chart %}{% endblock %}
-    {% block blog_list %}{% endblock %}
-    {% block blog_detail %}{% endblock %}
+  </a>
+  <div class="right menu" style="margin-right: 100px">
 
 
-
+    {% if user.is_authenticated %}
+    <div class="item">
+        <div class="ui blue basic button">
+          <a href="{% url 'add_article' %}"><i class="edit icon"></i>写文章</a>
+        </div>
+    </div>
+    <div class="ui dropdown item">
+        <i class="user icon"></i>{{ user }} <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="{% url 'userInfo' %}"><i class="address card icon"></i>个人信息</a>
+          <a class="item" href="{% url 'logout' %}?from={{ request.get_full_path }}"><i class="user outline icon"></i>注销</a>
+        </div>
+      </div>
+    {% else %}
+    <div class="item">
+      <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>&nbsp;/&nbsp;
+      <a href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+    </div>
+  {% endif %}
   </div>
 </div>
+
+
+
+{% block login %}{% endblock %}
+{% block register %}{% endblock %}
+{% block userInfo %}{% endblock %}
+{% block chart %}{% endblock %}
+{% block blog_list %}{% endblock %}
+{% block blog_detail %}{% endblock %}
+{% block add_article %}{% endblock %}
+
+
 
 </body>
 </html>
 
 
+
+{% block logout_script %}{% endblock %}
 {% block comment_script %}{% endblock %}
-{% block hot_blog %}{% endblock %}
-{#<script>#}
-{#  $('.menu .item')#}
-{#  .tab()#}
-{#;#}
-{##}
-{#</script>#}
+{% block hot_blog_script %}{% endblock %}
+
+<script>
+$('.ui.dropdown')
+  .dropdown()
+;
+</script>

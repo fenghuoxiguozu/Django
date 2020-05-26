@@ -26,7 +26,7 @@ SECRET_KEY = '4#=t$*8n)9ia9f(l_!yd*xs$3os=p3_1(%drz8rt0m^!(l1$rx'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'read',
     'comment',
     'like',
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ WSGI_APPLICATION = 'MyWebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wordpress', # 数据库名
+        'NAME': 'fenghuoxiguozu', # 数据库名
         'USER': 'root', # 账号
         'PASSWORD': 'lub08753', # 密码
         'HOST': 'localhost', # HOST
@@ -159,12 +160,15 @@ CKEDITOR_CONFIGS={
         'toolbar': 'Custom',
         # 添加按钮在这里
         'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat'],
+            ['Bold', 'Italic', 'Underline', 'Format', 'RemoveFormat','Blockquote'],
+            ['TextColor', 'BGColor'],
             ['NumberedList', 'BulletedList'],
             ['Smiley', 'SpecialChar','Blockquote', 'CodeSnippet'],
             # ['Image', 'Link', 'Unlink'],
             ['Maximize']
         ],
+            # 加入代码块插件
+        # 'extraPlugins': ','.join(['codesnippet']),
         'removePlugins':'elementspath',
         'resize_enable':False,
     }

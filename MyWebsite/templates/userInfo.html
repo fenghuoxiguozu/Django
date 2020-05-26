@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block userInfo %}
+
+
+<div class="ui two column stackable center aligned grid" style="height: 500px">
+  <div class="ui bottom attached segment pushable">
+    <div class="ui visible inverted left vertical sidebar menu">
+      <a class="item">
+        <i class="home icon"></i>
+        主页
+      </a>
+      <a class="item">
+        <i class="block layout icon"></i>
+        话题
+      </a>
+      <a class="item">
+        <i class="smile icon"></i>
+        朋友
+      </a>
+      <a class="item">
+        <i class="calendar icon"></i>
+        历史
+      </a>
+    </div>
+    <div class="pusher">
+      <div class="ui basic segment">
+        <h3 class="ui header">应用程序内容</h3>
+        <p>用户名：{{ user.username }}</p>
+        <p>昵称：{{ user.nickname }}</p>
+        <p>邮箱：{{ user.email }}</p>
+        <p>上次登录：{{ user.last_login }}</p>
+        <p>密码：{{ user.password }}</p>
+
+      </div>
+      <div>
+        <span>修改昵称</span>
+        <form action="" method="POST">
+        {% csrf_token %}
+          <div class="ui input text">
+          {{ nickname_form }}
+{#        {% for filed in nickname_form %}#}
+{#          66{{ field }}#}
+{#        {% endfor %}#}
+          </div>
+          <input type="submit" value="修改">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block logout_script %}
+<script>
+  $('.visible.example .ui.sidebar')
+  .sidebar({
+    context: '.visible.example .bottom.segment'
+  })
+  .sidebar('hide')
+;
+</script>
+{% endblock %}

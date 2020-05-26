@@ -11,8 +11,7 @@
 
 
 
-
-<div class="ui raised very padded text container segment">
+<div class="ui raised very padded text container segment" >
   <div class="ui breadcrumb">
     <a class="section" href="{% url 'article_list' %}">主页</a>
     <div class="divider"> / </div>
@@ -21,34 +20,38 @@
   <div class="ui clearing divider"></div>
 
   <div class="ui center aligned large header">{{ article.title }}</div>
-  <span>阅读数{{ article.get_read_num }}</span>
-  <span>评论数{% comment_counts article %}</span>
-  <span>点赞数{% like_counts article %}</span>
+  <span><i class="calendar alternate icon"></i>{{ article.published }}</span>
+  <span><i class="pencil alternate icon"></i>{{ user }}</span>
+  <span><i class="eye icon"></i>{{ article.get_read_num }}</span>
+  <span><i class="star icon"></i>{% like_counts article %}</span>
+  <span><i class="comments icon"></i>{% comment_counts article %}</span>
   <div class="ui clearing divider"></div>
 
       <p>{{ article.content | safe }}</p>
-  <div class="ui clearing divider"></div>
+  <div class="ui hidden divider"></div>
 
-  <div class="ui labeled button" tabindex="0" onclick="likeChange(this,'article',{{ article.pk }})">
-    <div class="ui red button">
-      {% like_status article as status%}
-      {% if status == 'active' %}
-      <i class="heart icon"></i> <span class="{{ status }}">已点赞</span>
-      {% else %}
-        <i class="heart icon"></i> <span class="{{ status }}">点赞</span>
-      {% endif %}
+  <div class="ui center aligned header">
+    <div class="ui labeled button" tabindex="0" onclick="likeChange(this,'article',{{ article.pk }})">
+      <div class="ui red button">
+        {% like_status article as status%}
+        {% if status == 'active' %}
+        <i class="heart icon"></i> <span class="{{ status }}">已点</span>
+        {% else %}
+          <i class="heart icon"></i> <span class="{{ status }}">点赞</span>
+        {% endif %}
+      </div>
+      <a class="ui basic red left pointing label">
+        {% like_counts article %}
+      </a>
     </div>
-    <a class="ui basic red left pointing label">
-      {% like_counts article %}
-    </a>
-  </div>
-  <div class="ui labeled button" tabindex="0">
+    <div class="ui labeled button" tabindex="0">
     <div class="ui basic blue button">
       <i class="fork icon"></i> 分享
     </div>
     <a class="ui basic left pointing blue label">
       1,048
     </a>
+  </div>
   </div>
 
   <div>
@@ -69,7 +72,7 @@
   {% if user.is_authenticated %}
   <form action="{% url 'submitComment' %}" method="POST" class="ui reply form" id="comment">
     {% csrf_token %}
-{#    {% for field in comment_form %}#}
+  {#    {% for field in comment_form %}#}
     {% comment_form article as cf %}
     {%  for field in cf %}
         {{ field }}
@@ -92,7 +95,7 @@
   <h3 class="ui dividing header" >评论</h3>
   <div class="ui comments" id="comment_list">
 
-{#    {% for comment in comments %}#}
+  {#    {% for comment in comments %}#}
     {% comment_list article as comments %}
     {% for comment in comments %}
     <div class="comment" id="root_{{ comment.pk }}">
@@ -137,10 +140,21 @@
     {% empty %}
     <p>暂无</p>
     {% endfor %}
-{#    </div>#}
+  {#    </div>#}
   </div>
 </div>
 
+
+<div class="ui modal">
+  <div class="header">标题</div>
+  <div class="content">
+    <p></p>
+  </div>
+  <div class="actions">
+    <div class="ui approve button"><a href="{% url 'login' %}">批准</a></div>
+    <div class="ui cancel button">取消</div>
+  </div>
+</div>
 
 {% endblock %}
 
@@ -202,16 +216,22 @@ function likeChange(obj,content_type,object_id) {
       is_like:is_like
     },
     success:function (data) {
-      var element = $(obj.getElementsByTagName('span'));
-      if(is_like){
-          element.addClass('active');
-          element.text('已点赞')
-      }else{
-          element.removeClass('active');
-          element.text('点赞')
+      if (data['status']=='SUCCESS'){
+        var element = $(obj.getElementsByTagName('span'));
+        if(is_like){
+            element.addClass('active');
+            element.text('已点')
+        }else{
+            element.removeClass('active');
+            element.text('点赞')
+        }
+        var liked_num = $(obj.getElementsByTagName('a'));
+        liked_num.text(data['like_num']);
+      }else {
+        $('.ui.modal')
+  .modal('show')
+;
       }
-      var liked_num = $(obj.getElementsByTagName('a'));
-      liked_num.text(data['like_num']);
     },
     error:function (xhr) {
       console.log(xhr)

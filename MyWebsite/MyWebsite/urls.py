@@ -15,19 +15,18 @@ Including another URLconf
 """
 import xadmin
 from django.urls import path,include
+from django.conf.urls.static import static
 from django.conf import settings
-from django.conf.urls.static import  static
 from .views import *
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
-    path('ckeditor',include('ckeditor_uploader.urls')),
+    path('ckeditor/',include('ckeditor_uploader.urls')),
     path('index',index,name='index'),
     path('article/', include('article.urls')),
-    path('login',signIn,name='login'),
-    path('register',signUp,name='register'),
     path('comments/',include('comment.urls')),
     path('likes/',include('like.urls')),
+    path('account/',include('account.urls')),
 ]
 
 urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

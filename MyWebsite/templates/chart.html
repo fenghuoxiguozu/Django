@@ -2,15 +2,16 @@
 
 {% block chart %}
 
-<div class="ui placeholder segment">
-  <div class="ui two column stackable center aligned grid">
-    <div class="ui vertical divider"></div>
-    <div class="middle aligned row">
-      <div class="column">
-        <div id="main" style="width: 600px;height:400px;"></div>
+<div class="ui stackable two column divided grid container">
+  <div class="row">
+    <div class="column">
+      <div class="ui segment">
+        <div id="main" style="width: 500px;height:400px;"></div>
       </div>
-      <div class="column">
-        <div class="ui pointing secondary menu" style="width: 500px">
+    </div>
+    <div class="column">
+      <div class="ui segment">
+        <div class="ui pointing secondary menu">
           <a class="item active" data-tab="first">近3日阅读量</a>
           <a class="item" data-tab="second">近7日阅读量</a>
           <a class="item" data-tab="third">近30日阅读量</a>
@@ -72,21 +73,10 @@
 </div>
 
 
-
 {% endblock %}
 
 
-
-
-
-
-
-
-
-
-
-
-{% block hot_blog %}
+{% block hot_blog_script %}
 <script>
 $('.menu .item')
   .tab()
@@ -113,7 +103,7 @@ var option = {
     position: 'bottom',
 			// 等同于 axisLine: true    开始
     axisLine: {
-      show: false
+      show: true
     },
     axisTick: {
       show: false
@@ -127,7 +117,7 @@ var option = {
   yAxis: {
     splitNumber: 5,
     axisLine: {
-      show: false
+      show: true
     },
     axisTick: {
       show: false

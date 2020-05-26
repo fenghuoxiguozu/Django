@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:article_id>',article_detail,name='article_detail'),
     path('date/<int:year>/<int:month>',article_with_date,name="article_with_date" ),
     path('type/<int:tag_id>',article_with_type,name="article_with_type" ),
+    path('add',add_article,name='add_article'),
 
 ]

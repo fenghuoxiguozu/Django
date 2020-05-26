@@ -25,12 +25,13 @@ def comment_list(obj):
     all_comments = Comment.objects.filter(content_type=content_type, object_id=obj.pk, parent=None)
     return all_comments.order_by('-commentTime')
 
-from django.db.models import Count
-@register.simple_tag()
-def like_counts(obj):
+from django.db.models import Count,Sum
+@register.simple_tag(takes_context=True)
+def like_counts(context,obj):
     content_type = ContentType.objects.get_for_model(obj)
-    like_count, created = LikeCount.objects.get_or_create(content_type=content_type, object_id=obj.pk)
-    return like_count.like_num
+    # like_count, created = LikeCount.objects.get_or_create(content_type=content_type, object_id=obj.pk,user=context['user'])
+    like_counts = LikeCount.objects.aggregate(counts=Sum('like_num'))
+    return like_counts['counts']
 
 
 @register.simple_tag(takes_context=True)
