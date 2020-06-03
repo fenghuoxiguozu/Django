@@ -32,7 +32,7 @@ class PermissionModelMultipleChoiceField(ModelMultipleChoiceField):
 class UserAdmin(object):
     # change_user_password_template = None
 
-    list_display = ('id', 'nickname') + BaseUserAdmin.list_display
+    list_display = ('id', 'nickname','uid','sex') + BaseUserAdmin.list_display
     list_filter = ('is_superuser', 'is_active')
     readonly_fields = ['last_login']
     search_fields = ('username',)

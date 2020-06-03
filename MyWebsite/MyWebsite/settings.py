@@ -26,7 +26,6 @@ SECRET_KEY = '4#=t$*8n)9ia9f(l_!yd*xs$3os=p3_1(%drz8rt0m^!(l1$rx'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
@@ -91,7 +90,7 @@ WSGI_APPLICATION = 'MyWebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'fenghuoxiguozu', # 数据库名
+        'NAME': 'wordpress', # 数据库名
         'USER': 'root', # 账号
         'PASSWORD': 'lub08753', # 密码
         'HOST': 'localhost', # HOST
@@ -184,3 +183,14 @@ CACHES = {
     }
 }
 # python manage.py createcachetable
+
+AUTH_USER_MODEL = 'account.User'
+
+# send e-mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  #email后端
+EMAIL_USE_TLS = False   #是否使用TLS安全传输协议 端口25
+EMAIL_USE_SSL = True    #是否使用SSL加密，qq企业邮箱要求使用 端口465
+EMAIL_HOST = 'smtp.qq.com'   #发送邮件的邮箱 的 SMTP服务器，这里用了qq企业邮箱
+EMAIL_PORT = 465     #发件箱的SMTP服务器端口
+EMAIL_HOST_USER = '1058247664@qq.com'    #发送邮件的邮箱地址
+EMAIL_HOST_PASSWORD = 'fiegbbvupwwxbedd'         #发送邮件的邮箱密码

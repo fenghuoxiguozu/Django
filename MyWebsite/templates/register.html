@@ -2,31 +2,81 @@
 
 {% block register %}
 
-<div class="ui three column centered grid">
+<div class="ui four column centered grid">
   <div class="column">
-    <div class="ui form segment">
-      <div class="ui teal center aligned large header">
-        注册
-      </div>
-
-      <form  action="" method="post">
-          {% csrf_token %}
-          {% for field in register_form %}
+    <h2 class="ui teal image header">
+      <div class="content">注册</div>
+    </h2>
+    <form action="" method="post" class="ui large form">
+      {% csrf_token %}
+      <div class="ui stacked segment">
         <div class="field">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-          <p>{{ field.errors.as_text }}</p>
+          {{ register_form.email }}
         </div>
-        {% endfor %}
 
-        <span >{{ register_form.non_field_errors }}</span>
-        <input type="submit" class="ui fluid large teal submit button">
-      </form>
+        <div class="field">
+          <button class="ui left floated button" id="email_captcha" >验证</button>
+          <span style="width: 70%;float:left">{{ register_form.code }}</span>
+        </div>
+        <br><br /><br>
+        <div class="field">{{ register_form.password }}</div>
 
-      <div class="ui message">
-        新用户？ <a href="login.php#">注册</a>
+        <div class="field">{{ register_form.password_again }}</div>
+
+        <div class="field">
+          <span style="width: 60%;float: left">{{ register_form.captcha }}</span>
+          <span id="captcha" style="float: left;cursor: pointer"><img src="{% url 'img_captcha' %}" style="height: 37px"></span>
+        </div>
+
+        <input class="ui fluid large teal submit button" type="submit" value="注册" id="submitBtn">
+
+
+      </div>
+    </form>
+    <div class="field">
+      <div class="ui error message" style="display: none" id="message">
+      {{ register_form.non_field_errors }}
+      {% for field in register_form %}
+        {{ field.errors }}
+      {% endfor %}
       </div>
     </div>
+    <div class="ui hidden divider"></div>
+    <span>已有账号，</span><a href="">登录</a>
   </div>
+
 </div>
+
+{% endblock %}
+
+{% block register_script %}
+<script>
+  $('#captcha').click(function () {
+    $('#captcha img').attr('src','/account/captcha/?random='+Math.random())
+  });
+
+  $('#submitBtn').click(function () {
+    $('#message').removeAttr("style")
+  });
+
+  $('#email_captcha').click(function () {
+    var email = $('#id_email').val();
+    console.log("输入的邮箱：",email);
+    $.ajax({
+      url:"{% url 'send_email' %}",
+      type:"GET",
+      data:{
+        'email':email,
+        'email_code':'email_code',
+      },
+      cache:false,
+      success:function (data) {
+        console.log(data)
+      },
+      error:function (xhr) {
+        console.log(xhr)
+      },
+    })
+  })
+</script>
 {% endblock %}

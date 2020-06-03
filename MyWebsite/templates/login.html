@@ -2,33 +2,60 @@
 
 {% block login %}
 
-<div class="ui three column centered grid">
+<div class="ui four column centered grid">
   <div class="column">
-    <div class="ui form segment">
-      <div class="ui teal center aligned large header">
-        登录到账号
-      </div>
-
-      <form  action="" method="post">
-          {% csrf_token %}
-          {% for field in login_form %}
+    <h2 class="ui teal image header">
+      <div class="content">登录</div>
+    </h2>
+    <form action="" method="post" class="ui large form">
+      {% csrf_token %}
+      <div class="ui stacked segment">
         <div class="field">
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-          <p>{{ field.errors.as_text }}</p>
+          {{ login_form.email }}
         </div>
-        {% endfor %}
 
-        <span >{{ login_form.non_field_errors }}</span>
-        <input type="submit" class="ui fluid large teal submit button">
-      </form>
+        <div class="field">{{ login_form.password }}</div>
 
-      <div class="ui message">
-        新用户？ <a href="{% url 'register' %}">注册</a>
+
+        <div class="field">
+          <span style="width: 60%;float: left">{{ login_form.captcha }}</span>
+          <span id="captcha" style="float: left;cursor: pointer"><img src="{% url 'img_captcha' %}" style="height: 37px"></span>
+        </div>
+
+        <div class="inline field">
+          <div class="ui checkbox">{{ login_form.remember }}<label>记住我</label></div>
+        </div>
+
+        <input class="ui fluid large teal submit button" type="submit" value="登录" id="submitBtn">
+
+      </div>
+    </form>
+    <div class="field">
+      <div class="ui error message" style="display: none" id="message">
+      {{ login_form.non_field_errors }}
+      {% for field in login_form %}
+        {{ field.errors }}
+      {% endfor %}
       </div>
     </div>
+    <div class="ui hidden divider"></div>
+    <span>还没账号，请先</span><a href="">注册</a>
+
   </div>
+
 </div>
+
 {% endblock %}
 
+{% block login_script %}
+<script>
+  $('#captcha').click(function () {
+    $('#captcha img').attr('src','/account/captcha/?random='+Math.random())
+  });
 
+  $('#submitBtn').click(function () {
+    $('#message').removeAttr("style")
+  })
+
+</script>
+{% endblock %}

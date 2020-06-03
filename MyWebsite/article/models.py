@@ -2,6 +2,8 @@ from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from read.models import ReadNumMethod,ReadDetail
 from django.contrib.contenttypes.fields import GenericRelation
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 # Create your models here.
 class Tag(models.Model):
@@ -21,6 +23,13 @@ class Article(models.Model,ReadNumMethod):
     content = RichTextUploadingField()
     published = models.DateField(auto_now_add=True)
     tagName = models.ManyToManyField('Tag')
+    photo = ProcessedImageField(  # 注意：ImageSpecField 不会生成数据库表的字段
+        upload_to='article/%Y/%m',
+        processors=[ResizeToFill(180, 140)],  # 处理成一寸照片的大小
+        format='JPEG',  # 处理后的图片格式
+        options={'quality': 95},  # 处理后的图片质量
+        default='article/default/photo_1.jpg'
+    )
     read_details = GenericRelation(ReadDetail)
 
     class Meta:
