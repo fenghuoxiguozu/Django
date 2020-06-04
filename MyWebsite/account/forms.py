@@ -74,3 +74,10 @@ class RegisterForm(forms.Form):
         cache_captcha = cache.get(captcha.lower())
         if not cache_captcha or cache_captcha.lower() != captcha.lower():
             raise forms.ValidationError("图形验证码错误")
+
+
+class NicknameForm(forms.Form):
+    nickname = forms.CharField(label="昵称", required=True)
+
+class SexForm(forms.Form):
+    sex = forms.CharField(label="性别", required=True,widget=forms.CheckboxInput)

@@ -7,6 +7,7 @@ urlpatterns = [
     path('logout',signOut,name='logout'),
     path('captcha/', img_captcha,name='img_captcha'),
     path('send_email',send_email,name='send_email'),
-    # path('userInfo',userInfo,name='userInfo'),
-    # path('nickname',change_nickname,name='change_nickname'),
+    path('userInfo',userInfo,name='userInfo'),
+    path('change_nickname',change_nickname,name='change_nickname'),
+    path('change_sex',change_sex,name='change_sex'),
 ]

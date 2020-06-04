@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     sex = models.CharField(choices=(('male', '男'),('female', '女'),),default='male',max_length=10)
     email = models.EmailField(verbose_name='邮箱', unique=True)
     phone = models.CharField(verbose_name='手机号', unique=True, max_length=11)
-    password = models.CharField(verbose_name='密码', max_length=12)
+    password = models.CharField(verbose_name='密码', max_length=80)
     data_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(verbose_name='激活状态', default=True)
     is_staff = models.BooleanField(verbose_name='管理员', default=False)

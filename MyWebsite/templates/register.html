@@ -28,21 +28,23 @@
           <span id="captcha" style="float: left;cursor: pointer"><img src="{% url 'img_captcha' %}" style="height: 37px"></span>
         </div>
 
-        <input class="ui fluid large teal submit button" type="submit" value="注册" id="submitBtn">
+        <input class="ui fluid large teal submit button" type="submit" value="注册">
 
 
       </div>
     </form>
     <div class="field">
-      <div class="ui error message" style="display: none" id="message">
+      <div class="ui error message">
       {{ register_form.non_field_errors }}
       {% for field in register_form %}
         {{ field.errors }}
       {% endfor %}
+      <span>已有账号，</span><a href="{% url 'login' %}">登录</a>
       </div>
+
     </div>
     <div class="ui hidden divider"></div>
-    <span>已有账号，</span><a href="">登录</a>
+
   </div>
 
 </div>
@@ -53,10 +55,6 @@
 <script>
   $('#captcha').click(function () {
     $('#captcha img').attr('src','/account/captcha/?random='+Math.random())
-  });
-
-  $('#submitBtn').click(function () {
-    $('#message').removeAttr("style")
   });
 
   $('#email_captcha').click(function () {

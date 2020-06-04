@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import login,authenticate,logout,get_user_model
 from django.urls import reverse
 from django.http import JsonResponse,HttpResponse
-from .forms import LoginForm,RegisterForm
+from .forms import *
 from account.utils.captcha import GenCaptcha
 from io import BytesIO
 from django.core.mail import send_mail
@@ -47,18 +47,12 @@ def signUp(request):
         if register_form.is_valid():
             email = register_form.cleaned_data['email']
             password = register_form.cleaned_data['password']
-            print("cleaned",email,password)
             user = User.objects.create_user(email=email,password=password)
-            print("user成功")
             user.save()
-            print("注册成功")
             del request.session['email_code']
             user = authenticate(email=email,password=password)
             login(request, user)
-            print("登录成功")
-            # return redirect(request.GET.get('from', reverse('home')))
-        else:
-            pass
+            return redirect(request.GET.get('from', reverse('index')))
     else:
         register_form = RegisterForm()
     context['register_form'] = register_form
@@ -93,19 +87,27 @@ def signOut(request):
     return redirect(request.GET.get('from',reverse('index')))
 
 
-# def userInfo(request):
-#     if request.method == "POST":
-#         nickname_form = NicknameForm(request.POST)
-#         if nickname_form.is_valid():
-#             nickname_new = nickname_form.cleaned_data['nickname_new']
-#             user = User.objects.get(username = request.user)
-#             user.nickname = nickname_new
-#             user.save()
-#             return redirect(request.GET.get('from', reverse('index')))
-#     else:
-#         nickname_form = NicknameForm()
-#
-#     context = {}
-#     context['nickname_form'] = nickname_form
-#
-#     return render(request, 'userInfo.html',context)
+def userInfo(request):
+
+    return render(request, 'userInfo.html')
+
+def change_nickname(request):
+    if request.method == "POST":
+        nickname_form = NicknameForm(request.POST)
+        if nickname_form.is_valid():
+            nickname_new = nickname_form.cleaned_data['nickname_new']
+            user = User.objects.get(username = request.user)
+            user.nickname = nickname_new
+            user.save()
+    else:
+        nickname_form = NicknameForm()
+    context = {}
+    context['form1'] = nickname_form
+    context['form1_title'] = '修改昵称'
+    return render(request, 'userInfo.html',context)
+
+def change_sex(request):
+    context = {}
+    context['form'] = SexForm()
+    context['form_title'] = '修改性别'
+    return render(request, 'userInfo.html', context)

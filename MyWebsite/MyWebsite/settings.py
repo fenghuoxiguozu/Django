@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'MyWebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wordpress', # 数据库名
+        'NAME': 'website', # 数据库名
         'USER': 'root', # 账号
         'PASSWORD': 'lub08753', # 密码
         'HOST': 'localhost', # HOST

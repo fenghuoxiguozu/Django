@@ -24,29 +24,28 @@
     </div>
     <div class="pusher">
       <div class="ui basic segment">
-        <h3 class="ui header">应用程序内容</h3>
-        <p>用户名：{{ user.username }}</p>
-        <p>昵称：{{ user.nickname }}</p>
-        <p>邮箱：{{ user.email }}</p>
-        <p>上次登录：{{ user.last_login }}</p>
-        <p>密码：{{ user.password }}</p>
+        <div class="ui list">
+        <div class="item">昵称：
+          {% if user.nickname %}
+            <p>{{ user.nickname }}</p>
+          {% else %}
+            <p>未设置</p>
+          {% endif %}
+          <a id="update_nickname">修改</a>
+        </div>
+        <div class="item">邮箱：{{ user.email }}</div>
+        <div class="item">上次登录：{{ user.last_login }}</div>
+        <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>
+      </div>
+      </div>
 
-      </div>
-      <div>
-        <span>修改昵称</span>
-        <form action="" method="POST">
-        {% csrf_token %}
-          <div class="ui input text">
-          {{ nickname_form }}
-{#        {% for filed in nickname_form %}#}
-{#          66{{ field }}#}
-{#        {% endfor %}#}
-          </div>
-          <input type="submit" value="修改">
-        </form>
-      </div>
     </div>
   </div>
+</div>
+
+<div class="ui modal" id="model">
+
+
 </div>
 {% endblock %}
 
@@ -59,5 +58,19 @@
   })
   .sidebar('hide')
 ;
+
+$('#update_nickname').click(function () {
+  $('.ui.modal')
+  .modal('show');
+  var form1_title = {{ form1_title }}
+  var shtml='<div class="header" id="model_title">'+form1_title+'</div> <div class="content"> <form action=""> <div class="ui input"></div> <input type="submit" value="确定"> </form> </div> <div class="actions"> <div class="ui red cancel inverted button"> <i class="remove icon"></i>取消 </div> </div>';
+  $('#model').append(shtml)
+});
+
+$('#update_sex').click(function () {
+  $('.ui.modal')
+  .modal('show');
+  $('form').attr("action","{% url 'change_sex' %}")
+});
 </script>
 {% endblock %}
