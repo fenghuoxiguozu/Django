@@ -6,27 +6,26 @@
 <div class="ui equal width centered grid">
 
 <div class="ten wide column">
-  <div class="ui raised segment">
+  <div class="ui segment">
     <div class="ui items">
       {% for article in articles %}
         <div class="item">
           <div class="image">
-            <img src="https://pic2.zhimg.com/v2-852aaf0518dd92858296de5032e9fc68_1200x500.jpg">
+            <img src="{{ article.photo.url }}">
           </div>
           <div class="middle aligned content">
-            <div class="ui teal header">
-              <a href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+            <a class="ui teal header" href="{% url 'article_detail' article.id %}">{{ article.title }}</a>
+            <div class="meta">
+              <i class="tags icon"></i>
+              {% for tag in article.tagName.all %}
+              <a class="ui blue label" href="{% url 'article_with_type' tag.pk %}">{{ tag }}&nbsp;</a>
+              {% endfor %}
             </div>
             <div class="description">
               <p>{{ article.content | truncatechars:150 | striptags }} </p>
             </div>
-            <div class="meta" style="float: right">
-              <i class="tags icon"></i>
-              {% for tag in article.tagName.all %}
-              <a href="{% url 'article_with_type' tag.pk %}">{{ tag }}&nbsp;</a>
-              {% endfor %}
-            </div>
-            <div class="extra" style="float: right">
+
+            <div class="extra">
               <span><i class="calendar alternate icon"></i>{{ article.published }}</span>
               <span><i class="pencil alternate icon"></i>{{ user }}</span>
               <span><i class="eye icon"></i>{{ article.get_read_num }}</span>
@@ -42,28 +41,27 @@
 
   <div class="ui container">
     <div class="ui pagination menu">
-            {% if articles.has_previous %}
+      {% if articles.has_previous %}
       <a class="active item" href="?page={{ articles.previous_page_number }}">
       <span> << </span>
       </a>
-          {% endif %}
+      {% endif %}
 
-          {% if articles.paginator.num_pages > 4 %}
-      <a class=" active item" href="?page=1">1</a>
-      <a class=" active item" href="?page=2">2</a>
-      <a class=" active item" href="?page=3">3</a>
-      <a class=" disabled item" >...</a>
-          {% endif %}
+      {% for page in page_range %}
+        <a class="item" href="?page={{ page }}">{{ page }}</a>
+      {% endfor %}
+      {% if articles.paginator.num_pages > 5 %}
+        <a class=" disabled item" >...</a>
+        <a class="item" href="?page={{ articles.paginator.num_pages }}">{{ articles.paginator.num_pages }}</a>
+      {% endif %}
 
-      <a class="item" href="?page={{ articles.number }}">
-            {{ articles.number }}
-      </a>
+      <a class="active item">第{{ articles.number }} / {{ articles.paginator.num_pages }}</a>
 
-          {% if articles.has_next %}
+      {% if articles.has_next %}
       <a class="active item" href="?page={{ articles.next_page_number }}">
       <span> >> </span>
-          {% endif %}
       </a>
+      {% endif %}
 
       <a class="item">
           共 {{ articles.paginator.num_pages }} 页
@@ -74,29 +72,54 @@
 </div>
 
 <div class="four wide column">
-  <div class="ui segments">
-    <h4 class="ui top attached block header">时间归档</h4>
-    {% for article_date,article_count in article_dates.items %}
-    <div class="ui segment">
-      <a href="{% url 'article_with_date' article_date.year article_date.month %}">
-      <p>{{ article_date | date:"Y年m月" }} ({{ article_count }})</p></a>
+  <div class="row">
+    <div class="ui card">
+      <div class="content">
+        <div class="right floated author">
+          <img class="ui avatar image" src="{{ user.head.url }}"> {{ user.nickname }}
+        <div class="meta">
+          <span class="time">上次登录：{{ user.last_login | date:"Y年m月d日" }}</span>
+{#          <span class="category"></span>#}
+        </div>
+        <div class="description">
+          <p>但事实上所所所所所所所所所所所所所所所所所所所所所所所所所所所所所</p>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="right floated author">
+          <img class="ui avatar image" src="../images/avatar/small/matt.jpg"> Matt
+        </div>
+      </div>
     </div>
-    {% endfor %}
- </div>
-
-  <div class="ui segments">
-    <h4 class="ui top attached block header">标签归档</h4>
-    {% for article_type in article_types %}
-    <div class="ui segment">
-      <a href="{% url 'article_with_type' article_type.pk %}">
-      <p>{{ article_type.name }} ({{ article_type.type_count }})</p></a>
-    </div>
-    {% endfor %}
   </div>
-</div>
+
+  <div class="ui hidden divider"></div>
+  <div class="row">
+    <div class="ui top attached success message">时间归档</div>
+    <div class="ui bottom attached segment">
+      {% for article_date,article_count in article_dates.items %}
+      <a class="item" href="{% url 'article_with_date' article_date.year article_date.month %}">
+        <p>{{ article_date | date:"Y年m月" }} ({{ article_count }})</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="ui hidden divider"></div>
+  <div class="row">
+    <div class="ui top attached success message">标签归档</div>
+    <div class="ui bottom attached segment">
+      {% for article_type in article_types %}
+      <a href="{% url 'article_with_type' article_type.pk %}">
+        <p>{{ article_type.name }} ({{ article_type.type_count }})</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+
+
+  </div>
 
 </div>
 
-
-  
 {% endblock %}

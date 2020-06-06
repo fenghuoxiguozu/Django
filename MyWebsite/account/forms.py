@@ -1,5 +1,6 @@
 from django import forms
 from django.core.cache import cache
+from account.models import SEX_CHOICE
 from django.contrib.auth import authenticate,get_user_model
 User = get_user_model()
 
@@ -77,7 +78,10 @@ class RegisterForm(forms.Form):
 
 
 class NicknameForm(forms.Form):
-    nickname = forms.CharField(label="昵称", required=True)
+    nickname_new = forms.CharField(label="昵称", required=True)
 
 class SexForm(forms.Form):
-    sex = forms.CharField(label="性别", required=True,widget=forms.CheckboxInput)
+    sex = forms.ChoiceField(label="性别", choices=SEX_CHOICE,required=True,widget=forms.Select)
+
+class HeadForm(forms.Form):
+    head = forms.ImageField(label="头像",required=True,widget=forms.FileInput)

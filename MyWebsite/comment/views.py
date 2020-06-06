@@ -20,7 +20,7 @@ def submit(request):
             comment.reply_to = parent.user
 
         comment.save()
-        response_dict={"user":comment.user.username,"commentText":comment.commentText,
+        response_dict={"user":comment.user.uid,"commentText":comment.commentText,
                        "commentTime":comment.commentTime.strftime('%Y-%m-%d %H:%M:%S'),"status":"SUCCESS",'pk':comment.pk,
                        'root_pk':comment.root.pk if not comment.root is None else '',
                        'reply_to':comment.reply_to.username if not parent is None else ''}

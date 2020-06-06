@@ -10,4 +10,5 @@ urlpatterns = [
     path('userInfo',userInfo,name='userInfo'),
     path('change_nickname',change_nickname,name='change_nickname'),
     path('change_sex',change_sex,name='change_sex'),
+    path('change_head',change_head,name='change_head'),
 ]

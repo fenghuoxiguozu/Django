@@ -2,46 +2,91 @@
 {% block userInfo %}
 
 
-<div class="ui two column stackable center aligned grid" style="height: 500px">
-  <div class="ui bottom attached segment pushable">
-    <div class="ui visible inverted left vertical sidebar menu">
-      <a class="item">
-        <i class="home icon"></i>
-        主页
-      </a>
-      <a class="item">
-        <i class="block layout icon"></i>
-        话题
-      </a>
-      <a class="item">
-        <i class="smile icon"></i>
-        朋友
-      </a>
-      <a class="item">
-        <i class="calendar icon"></i>
-        历史
-      </a>
+{#<div class="ui two column stackable center aligned grid" style="height: 500px">#}
+{#  <div class="ui bottom attached segment pushable">#}
+{#    <div class="ui visible inverted left vertical sidebar menu">#}
+{#      <a class="item">#}
+{#        <i class="home icon"></i>#}
+{#        主页#}
+{#      </a>#}
+{#      <a class="item">#}
+{#        <i class="block layout icon"></i>#}
+{#        话题#}
+{#      </a>#}
+{#      <a class="item">#}
+{#        <i class="smile icon"></i>#}
+{#        朋友#}
+{#      </a>#}
+{#      <a class="item">#}
+{#        <i class="calendar icon"></i>#}
+{#        历史#}
+{#      </a>#}
+{#    </div>#}
+{#    <div class="pusher">#}
+{#      <div class="ui basic segment">#}
+{#        <div class="ui relaxed list">#}
+{#          <div class="item">昵称：#}
+{#            {% if user.nickname %}#}
+{#              <span>{{ user.nickname }}</span>#}
+{#            {% else %}#}
+{#              <span>未设置</span>#}
+{#            {% endif %}#}
+{#            <a id="update_nickname">修改</a>#}
+{#          </div>#}
+{#          <div class="item">邮箱：{{ user.email }}</div>#}
+{#          <div class="item">上次登录：{{ user.last_login }}</div>#}
+{#          <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>#}
+{#          <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>#}
+{#        </div>#}
+{#      </div>#}
+{##}
+{#    </div>#}
+{#  </div>#}
+{#</div>#}
+
+
+
+
+
+
+<div class="ui equal width grid">
+  <div class="two wide column"></div>
+  <div class="two wide column">
+    <div class="ui secondary vertical pointing menu" style="width: auto">
+      <a class="item active" data-tab="first">个人信息</a>
+      <a class="item" data-tab="second">浏览记录</a>
+      <a class="item" data-tab="third">发帖记录</a>
+{#      <a class="item" data-tab="third">发帖记录</a>#}
     </div>
-    <div class="pusher">
-      <div class="ui basic segment">
-        <div class="ui list">
+  </div>
+  <div class="eight wide column">
+    <div class="ui bottom attached tab segment active" data-tab="first">
+      <div class="ui relaxed list">
         <div class="item">昵称：
           {% if user.nickname %}
-            <p>{{ user.nickname }}</p>
+          <span>{{ user.nickname }}</span>
           {% else %}
-            <p>未设置</p>
+          <span>未设置</span>
           {% endif %}
           <a id="update_nickname">修改</a>
-        </div>
+          </div>
         <div class="item">邮箱：{{ user.email }}</div>
         <div class="item">上次登录：{{ user.last_login }}</div>
         <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>
+        <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>
       </div>
-      </div>
-
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="second">
+      第二
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="third">
+      第三
     </div>
   </div>
+  <div class="two wide column"></div>
+
 </div>
+
 
 <div class="ui modal" id="model">
 
@@ -52,25 +97,62 @@
 
 {% block logout_script %}
 <script>
-  $('.visible.example .ui.sidebar')
-  .sidebar({
-    context: '.visible.example .bottom.segment'
-  })
-  .sidebar('hide')
+$('.menu .item')
+  .tab()
 ;
+
 
 $('#update_nickname').click(function () {
   $('.ui.modal')
   .modal('show');
-  var form1_title = {{ form1_title }}
-  var shtml='<div class="header" id="model_title">'+form1_title+'</div> <div class="content"> <form action=""> <div class="ui input"></div> <input type="submit" value="确定"> </form> </div> <div class="actions"> <div class="ui red cancel inverted button"> <i class="remove icon"></i>取消 </div> </div>';
-  $('#model').append(shtml)
+  $.ajax({
+    url:'{% url "change_nickname" %}',
+    type:"GET",
+    data:{},
+    success:function (data) {
+      $('#model').html(data);
+      $("form").attr("action","{% url 'change_nickname' %}")
+    },
+    error:function (xhr) {
+      console.log(xhr)
+    }
+  })
 });
 
 $('#update_sex').click(function () {
   $('.ui.modal')
   .modal('show');
-  $('form').attr("action","{% url 'change_sex' %}")
+  $.ajax({
+    url:'{% url "change_sex" %}',
+    type:"GET",
+    data:{},
+    success:function (data) {
+      $('#model').html(data);
+      $("form").attr("action","{% url 'change_sex' %}")
+      $("form select").attr("class","ui fluid dropdown")
+    },
+    error:function (xhr) {
+      console.log(xhr)
+    }
+  })
+});
+
+$('#update_head').click(function () {
+  $('.ui.modal')
+  .modal('show');
+  $.ajax({
+    url:'{% url "change_head" %}',
+    type:"GET",
+    data:{},
+    success:function (data) {
+      $('#model').html(data);
+      $("form").attr("action","{% url 'change_head' %}");
+      $("form").attr("enctype","multipart/form-data");
+    },
+    error:function (xhr) {
+      console.log(xhr)
+    }
+  })
 });
 </script>
 {% endblock %}

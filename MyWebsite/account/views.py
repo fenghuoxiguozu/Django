@@ -96,18 +96,46 @@ def change_nickname(request):
         nickname_form = NicknameForm(request.POST)
         if nickname_form.is_valid():
             nickname_new = nickname_form.cleaned_data['nickname_new']
-            user = User.objects.get(username = request.user)
+            user = User.objects.get(email = request.user)
             user.nickname = nickname_new
             user.save()
+            return redirect(request.META.get('HTTP_REFERER',reverse('index')))
     else:
         nickname_form = NicknameForm()
     context = {}
-    context['form1'] = nickname_form
-    context['form1_title'] = '修改昵称'
-    return render(request, 'userInfo.html',context)
+    context['form'] = nickname_form
+    context['form_title'] = '修改昵称'
+    return render(request, 'forms.html', context)
 
 def change_sex(request):
+    if request.method == "POST":
+        form = SexForm(request.POST)
+        if form.is_valid():
+            sex = form.cleaned_data['sex']
+            user = User.objects.get(email = request.user)
+            user.sex = sex
+            user.save()
+            return redirect(request.META.get('HTTP_REFERER',reverse('index')))
+    else:
+        form = SexForm()
     context = {}
-    context['form'] = SexForm()
+    context['form'] = form
     context['form_title'] = '修改性别'
-    return render(request, 'userInfo.html', context)
+    return render(request, 'forms.html', context)
+
+
+def change_head(request):
+    if request.method == "POST":
+        form = HeadForm(request.POST,request.FILES)
+        if form.is_valid():
+            head = form.cleaned_data['head']
+            user = User.objects.get(email=request.user)
+            user.head = head
+            user.save()
+            return redirect(request.META.get('HTTP_REFERER',reverse('index')))
+    else:
+        form = HeadForm()
+    context = {}
+    context['form'] = form
+    context['form_title'] = '修改头像'
+    return render(request, 'forms.html', context)

@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from .models import *
 from read.utils import add_readNum
 from comment.models import Comment
+from article.forms import ArticleForm
 
 
 def public_article_list(request,articles):
@@ -65,4 +66,21 @@ def article_detail(request,article_id):
 
 def add_article(request):
     context ={}
+    if request.method == 'POST':
+        article_form = ArticleForm(request.POST,request.FILES)
+        if article_form.is_valid():
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            tagName_list = request.POST.getlist('tagName')
+            photo = request.FILES.get('photo')
+            print(tagName_list,photo)
+            article = Article.objects.create(title=title,content=content, photo=photo,author_id=request.user.uid)
+            article.tagName.add(*tagName_list)
+            article.save()
+
+            # context["status"] = 'SUCCESS'
+            print("ok")
+    else:
+        article_form = ArticleForm()
+    context['article_form'] = article_form
     return render(request,'add_article.html',context)

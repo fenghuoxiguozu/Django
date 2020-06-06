@@ -3,5 +3,25 @@
 
 
 
+<div class="ui raised very padded text container secondary segment">
+  <form action="" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+    {% for field in article_form %}
+      {{ field }}
+    <div class="ui hidden divider"></div>
+    {% endfor %}
+    <div>
+      <input type="submit" value="发布"  class="ui right floated primary button">
+    </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
+
+
+
+  </form>
+</div>
 {% endblock %}
+
 

@@ -1,3 +1,14 @@
-{% extends 'base.html' %}
+<div class="header">{{ form_title }}</div>
+<div class="content">
+  <form action="" method="POST">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="ui input">{{ field }}</div>
+  {% endfor %}
+  <input type="submit" value="确定" class="ui primary button">
+  </form>
+</div>
+<div class="actions">
+  <div class="ui cancel button">取消</div>
+</div>
 
-<p>通用表单</p>

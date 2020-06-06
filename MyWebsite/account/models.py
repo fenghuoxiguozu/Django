@@ -6,7 +6,7 @@ from shortuuidfield import ShortUUIDField
 from django.contrib.auth.models import PermissionsMixin,BaseUserManager
 from django.contrib.auth.base_user import AbstractBaseUser
 
-
+SEX_CHOICE = (('male', '男'),('female', '女'),)
 class UserManager(BaseUserManager):
     def _create_user(self,email,password,**kwargs):
         if not email:
@@ -33,9 +33,9 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     uid = ShortUUIDField(primary_key=True)
     nickname = models.CharField(max_length=10)
-    sex = models.CharField(choices=(('male', '男'),('female', '女'),),default='male',max_length=10)
+    sex = models.CharField(choices=SEX_CHOICE,default='male',max_length=10)
     email = models.EmailField(verbose_name='邮箱', unique=True)
-    phone = models.CharField(verbose_name='手机号', unique=True, max_length=11)
+    phone = models.CharField(verbose_name='手机号', max_length=11)
     password = models.CharField(verbose_name='密码', max_length=80)
     data_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(verbose_name='激活状态', default=True)

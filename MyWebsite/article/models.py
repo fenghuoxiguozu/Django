@@ -4,6 +4,7 @@ from read.models import ReadNumMethod,ReadDetail
 from django.contrib.contenttypes.fields import GenericRelation
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
+from django.conf import settings
 
 # Create your models here.
 class Tag(models.Model):
@@ -30,6 +31,7 @@ class Article(models.Model,ReadNumMethod):
         options={'quality': 95},  # 处理后的图片质量
         default='article/default/photo_1.jpg'
     )
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     read_details = GenericRelation(ReadDetail)
 
     class Meta:
