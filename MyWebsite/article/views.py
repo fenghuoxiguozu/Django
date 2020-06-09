@@ -60,7 +60,7 @@ def article_detail(request,article_id):
     # context['comments'] = Comment.objects.filter(content_type=article_content_type, object_id=article.pk,parent=None)
     # context['comment_form'] = CommentForm(initial={'content_type':article_content_type,'object_id':article_id,'reply_id':0})
     response = render(request,'article_detail.html',context)
-    response.set_cookie(key,'true')
+    response.set_cookie(key,'true',expires=3600)
     return response
 
 

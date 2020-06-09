@@ -1,91 +1,169 @@
 {% extends 'base.html' %}
 {% block userInfo %}
 
+<div class="ui segment" style="height: 450px;width: 80%;margin-left: 10%">
+  <div class="ui grid">
+    <div class="four wide column">
+      <div class="ui secondary vertical pointing menu" style="text-align: right">
+        <a class="active item" data-tab="first">个人信息</a>
+{#        <a class="item" data-tab="second">第二</a>#}
+        <a class="item" data-tab="third">操作记录</a>
+      </div>
 
-{#<div class="ui two column stackable center aligned grid" style="height: 500px">#}
-{#  <div class="ui bottom attached segment pushable">#}
-{#    <div class="ui visible inverted left vertical sidebar menu">#}
-{#      <a class="item">#}
-{#        <i class="home icon"></i>#}
-{#        主页#}
-{#      </a>#}
-{#      <a class="item">#}
-{#        <i class="block layout icon"></i>#}
-{#        话题#}
-{#      </a>#}
-{#      <a class="item">#}
-{#        <i class="smile icon"></i>#}
-{#        朋友#}
-{#      </a>#}
-{#      <a class="item">#}
-{#        <i class="calendar icon"></i>#}
-{#        历史#}
-{#      </a>#}
-{#    </div>#}
-{#    <div class="pusher">#}
-{#      <div class="ui basic segment">#}
-{#        <div class="ui relaxed list">#}
-{#          <div class="item">昵称：#}
-{#            {% if user.nickname %}#}
-{#              <span>{{ user.nickname }}</span>#}
-{#            {% else %}#}
-{#              <span>未设置</span>#}
-{#            {% endif %}#}
-{#            <a id="update_nickname">修改</a>#}
-{#          </div>#}
-{#          <div class="item">邮箱：{{ user.email }}</div>#}
-{#          <div class="item">上次登录：{{ user.last_login }}</div>#}
-{#          <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>#}
-{#          <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>#}
+    </div>
+    <div class="twelve wide column">
+      <div class="ui active tab " data-tab="first">
+        <div class="ui top attached tabular menu">
+          <div class="ui relaxed list">
+            <div class="item">昵称：
+              {% if user.nickname %}
+              <span>{{ user.nickname }}</span>
+              {% else %}
+              <span>未设置</span>
+              {% endif %}
+              <a id="update_nickname">修改</a>
+            </div>
+            <div class="item">邮箱：{{ user.email }}</div>
+            <div class="item">上次登录：{{ user.last_login }}</div>
+            <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>
+            <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>
+          </div>
+        </div>
+
+      </div>
+
+
+{#      <div class="ui tab " data-tab="second">#}
+{#        <div class="ui top attached tabular menu">#}
+{#          <a class="item" data-tab="second/a">2A</a>#}
 {#        </div>#}
 {#      </div>#}
+
+      <div class="ui tab " data-tab="third">
+        <div class="ui top attached tabular menu">
+          <a class="item" data-tab="third/a">浏览记录</a>
+          <a class="item" data-tab="third/b">点赞记录</a>
+          <a class="item" data-tab="third/c">评论记录</a>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="third/a">浏览记录</div>
+        <div class="ui bottom attached tab segment" data-tab="third/b">点赞记录</div>
+        <div class="ui bottom attached tab segment" data-tab="third/c">评论记录</div>
+      </div>
+
+    </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+{#<div class="ui equal width grid">#}
+{#  <div class="two wide column"></div>#}
 {##}
+{#  <div class="two wide column">#}
+{#    <div class="ui secondary vertical pointing menu" style="width: auto">#}
+{#      <a class="active item" data-tab="first">个人信息</a>#}
+{#      <a class="item" data-tab="second">第二</a>#}
+{#      <a class="item" data-tab="third">操作记录</a>#}
 {#    </div>#}
 {#  </div>#}
+{##}
+{#  <div class="eight wide column">#}
+{#    <div class="ui active tab segment" data-tab="first">#}
+{#      <div class="ui top attached tabular menu">#}
+{#        <a class="item" data-tab="first/a">#}
+{#            <div class="ui relaxed list">#}
+{#              <div class="item">昵称：#}
+{#                {% if user.nickname %}#}
+{#                <span>{{ user.nickname }}</span>#}
+{#                {% else %}#}
+{#                <span>未设置</span>#}
+{#                {% endif %}#}
+{#                <a id="update_nickname">修改</a>#}
+{#              </div>#}
+{#              <div class="item">邮箱：{{ user.email }}</div>#}
+{#              <div class="item">上次登录：{{ user.last_login }}</div>#}
+{#              <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>#}
+{#              <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>#}
+{#            </div>#}
+{#        </a>#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#    <div class="ui tab segment" data-tab="second">#}
+{#      <div class="ui top attached tabular menu">#}
+{#        <a class="item" data-tab="second/a">2A</a>#}
+{#      </div>#}
+{#    </div>#}
+{##}
+{#    <div class="ui tab segment" data-tab="third">#}
+{#      <div class="ui top attached tabular menu">#}
+{#        <a class="item" data-tab="third/a">浏览记录</a>#}
+{#        <a class="item" data-tab="third/b">点赞记录</a>#}
+{#        <a class="item" data-tab="third/c">评论记录</a>#}
+{#      </div>#}
+{#      <div class="ui bottom attached tab segment" data-tab="third/a">浏览记录</div>#}
+{#      <div class="ui bottom attached tab segment" data-tab="third/b">点赞记录</div>#}
+{#      <div class="ui bottom attached tab segment" data-tab="third/c">评论记录</div>#}
+{#    </div>#}
+{#  </div>#}
+{##}
+{#  <div class="two wide column"></div>#}
+{##}
+{##}
+{##}
 {#</div>#}
 
 
-
-
-
-
-<div class="ui equal width grid">
-  <div class="two wide column"></div>
-  <div class="two wide column">
-    <div class="ui secondary vertical pointing menu" style="width: auto">
-      <a class="item active" data-tab="first">个人信息</a>
-      <a class="item" data-tab="second">浏览记录</a>
-      <a class="item" data-tab="third">发帖记录</a>
+{#<div class="ui equal width grid">#}
+{#  <div class="two wide column"></div>#}
+{#  <div class="two wide column">#}
+{#    <div class="ui secondary vertical pointing menu" style="width: auto">#}
+{#      <a class="item active" data-tab="first">个人信息</a>#}
+{#      <a class="item" data-tab="second">浏览记录</a>#}
 {#      <a class="item" data-tab="third">发帖记录</a>#}
-    </div>
-  </div>
-  <div class="eight wide column">
-    <div class="ui bottom attached tab segment active" data-tab="first">
-      <div class="ui relaxed list">
-        <div class="item">昵称：
-          {% if user.nickname %}
-          <span>{{ user.nickname }}</span>
-          {% else %}
-          <span>未设置</span>
-          {% endif %}
-          <a id="update_nickname">修改</a>
-          </div>
-        <div class="item">邮箱：{{ user.email }}</div>
-        <div class="item">上次登录：{{ user.last_login }}</div>
-        <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>
-        <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>
-      </div>
-    </div>
-    <div class="ui bottom attached tab segment" data-tab="second">
-      第二
-    </div>
-    <div class="ui bottom attached tab segment" data-tab="third">
-      第三
-    </div>
-  </div>
-  <div class="two wide column"></div>
-
-</div>
+{#      <a class="item" data-tab="third">发帖记录</a>#}
+{#    </div>#}
+{#  </div>#}
+{#  <div class="eight wide column">#}
+{#    <div class="ui bottom attached tab segment active" data-tab="first">#}
+{#      <a class="item" data-tab="first/a">1A</a>#}
+{#    <a class="item" data-tab="first/b">1B</a>#}
+{#    <a class="item active" data-tab="first/c">1C</a>#}
+{#  </div>#}
+{#  <div class="ui bottom attached tab segment" data-tab="first/a">1A</div>#}
+{#  <div class="ui bottom attached tab segment" data-tab="first/b">1B</div>#}
+{#  <div class="ui bottom attached tab segment active" data-tab="first/c">1C</div>#}
+{#      <div class="ui relaxed list">#}
+{#        <div class="item">昵称：#}
+{#          {% if user.nickname %}#}
+{#          <span>{{ user.nickname }}</span>#}
+{#          {% else %}#}
+{#          <span>未设置</span>#}
+{#          {% endif %}#}
+{#          <a id="update_nickname">修改</a>#}
+{#          </div>#}
+{#        <div class="item">邮箱：{{ user.email }}</div>#}
+{#        <div class="item">上次登录：{{ user.last_login }}</div>#}
+{#        <div class="item">性别：{{ user.sex }}<a id="update_sex">修改</a></div>#}
+{#        <div class="item">头像：<img class="ui middle aligned tiny image" src="{{ user.head.url }}"> <a id="update_head">修改</a></div>#}
+{#      </div>#}
+{#    </div>#}
+{#    <div class="ui bottom attached tab segment" data-tab="second">#}
+{#      第二#}
+{#    </div>#}
+{#    <div class="ui bottom attached tab segment" data-tab="third">#}
+{#      第三#}
+{#    </div>#}
+{#  </div>#}
+{#  <div class="two wide column"></div>#}
+{##}
+{#</div>#}
 
 
 <div class="ui modal" id="model">
@@ -97,9 +175,14 @@
 
 {% block logout_script %}
 <script>
-$('.menu .item')
-  .tab()
-;
+$('.menu .item').tab();
+
+{##}
+{#$('.paths.example .menu .item')#}
+{#  .tab({#}
+{#    context: '.paths.example'#}
+{#  })#}
+{#;#}
 
 
 $('#update_nickname').click(function () {

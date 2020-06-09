@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('article/', include('article.urls'))
 """
 import xadmin
+import notifications.urls
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
@@ -22,6 +23,7 @@ from .views import *
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
     path('ckeditor/',include('ckeditor_uploader.urls')),
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     path('index',index,name='index'),
     path('article/', include('article.urls')),
     path('comments/',include('comment.urls')),

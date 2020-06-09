@@ -8,6 +8,7 @@ from io import BytesIO
 from django.core.mail import send_mail
 from django.core.cache import cache
 import random,string,time
+# from like.models import LikeCount
 User = get_user_model()
 
 
@@ -88,6 +89,7 @@ def signOut(request):
 
 
 def userInfo(request):
+    # record = LikeCount.objects.filter(like_num=1,user=request.user)
 
     return render(request, 'userInfo.html')
 
@@ -123,7 +125,6 @@ def change_sex(request):
     context['form_title'] = '修改性别'
     return render(request, 'forms.html', context)
 
-
 def change_head(request):
     if request.method == "POST":
         form = HeadForm(request.POST,request.FILES)
@@ -139,3 +140,8 @@ def change_head(request):
     context['form'] = form
     context['form_title'] = '修改头像'
     return render(request, 'forms.html', context)
+
+def my_notifications(request):
+    context = {}
+    return render(request, 'my_notifications.html',context)
+

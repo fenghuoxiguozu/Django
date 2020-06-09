@@ -35,9 +35,10 @@
         </div>
     </div>
     <div class="ui dropdown item">
-        <img class="ui avatar image" src="{{ user.head.url }}"> 用户{{ user.uid | slice:"-5:" }} <i class="dropdown icon"></i>
+        <img class="ui avatar image" src="{{ user.head.url }}">{% if user.nickname %} {{ user.nickname }}{% else %}用户{{ user.uid | slice:"-5:" }}{% endif %}<i class="dropdown icon"></i>
         <div class="menu">
           <a class="item" href="{% url 'userInfo' %}"><i class="address card icon"></i>个人信息</a>
+          <a class="item" href="{% url 'my_notifications' %}"><i class="address card icon"></i>我的消息</a>
           <a class="item" href="{% url 'logout' %}?from={{ request.get_full_path }}"><i class="user outline icon"></i>注销</a>
         </div>
       </div>
@@ -55,6 +56,7 @@
 {% block login %}{% endblock %}
 {% block register %}{% endblock %}
 {% block userInfo %}{% endblock %}
+{% block my_notifications %}{% endblock %}
 {% block add_article %}{% endblock %}
 {% block chart %}{% endblock %}
 {% block blog_list %}{% endblock %}

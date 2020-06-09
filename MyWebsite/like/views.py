@@ -16,7 +16,7 @@ def ErrorResponse(code, message):
 def SuccessResponse(like_num):
     data = {}
     data['status'] = 'SUCCESS'
-    data['like_num'] = like_num
+    data['like_num'] = like_num or 0
     return JsonResponse(data)
 
 def likeChange(request):
@@ -29,19 +29,27 @@ def likeChange(request):
     is_like = request.GET.get('is_like')
 
     content_type = ContentType.objects.get(model=content_type)
-    # model_class = content_type.model_class()
-    # model_obj = model_class.objects.get(pk=object_id)
 
-    record = LikeRecord.objects.create(content_type=content_type, object_id=object_id, user=user)
-    counted, created = LikeCount.objects.get_or_create(content_type=content_type, object_id=object_id,user=user)
+    # record = LikeRecord.objects.create(content_type=content_type, object_id=object_id, user=user)
+    # counted, created = LikeCount.objects.get_or_create(content_type=content_type, object_id=object_id,user=user)
+
+
     if is_like == 'true':
-        counted.like_num = 1
+        record, created = LikeRecord.objects.get_or_create(content_type=content_type, object_id=object_id, user=user)
+        if created:
+            print("created",record.like_num)
+            record.like_num = 1
+            record.save()
+        else:
+            pass
     else:
-        counted.like_num = 0
-    counted.save()
-    record.save()
+        record = LikeRecord.objects.get(content_type=content_type, object_id=object_id, user=user)
+        print("exist()", record.like_num)
+        record.delete()
+        # record.save()
     # like_num = LikeRecord.objects.filter(content_type=content_type, object_id=object_id, user=user).count()%2
-    like_counts = LikeCount.objects.aggregate(counts=Sum('like_num'))
+    like_counts = LikeRecord.objects.filter(object_id=object_id).aggregate(counts=Sum('like_num'))
+    print('like_counts:',like_counts)
     return SuccessResponse(like_counts['counts'])
 
 

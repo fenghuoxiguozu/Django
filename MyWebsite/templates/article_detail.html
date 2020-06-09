@@ -23,7 +23,7 @@
   <span><i class="calendar alternate icon"></i>{{ article.published }}</span>
   <span><i class="pencil alternate icon"></i>{{ user }}</span>
   <span><i class="eye icon"></i>{{ article.get_read_num }}</span>
-  <span><i class="star icon"></i>{% like_counts article %}</span>
+{#  <span><i class="star icon"></i>{% like_counts article %}</span>#}
   <span><i class="comments icon"></i>{% comment_counts article %}</span>
   <div class="ui clearing divider"></div>
 
@@ -92,7 +92,7 @@
   {% endif %}
   <div class="ui hidden divider"></div>
 
-  <h3 class="ui dividing header" >评论</h3>
+  <h3 class="ui dividing header" >评论({% comment_counts article %})</h3>
   <div class="ui comments" id="comment_list">
 
   {#    {% for comment in comments %}#}
@@ -100,10 +100,10 @@
     {% for comment in comments %}
     <div class="comment" id="root_{{ comment.pk }}">
       <a class="avatar">
-        <img src="../images/avatar/small/elliot.jpg">
+        <img src="{{ comment.user.head.url }}">
       </a>
       <div class="content">
-        <a class="author">{{ comment.user.username }}</a>
+        <a class="author">{% if comment.user.nickname %} {{ comment.user.nickname }}{% else %}用户{{ comment.user.uid | slice:"-5:" }}{% endif %}</a>
         <div class="metadata">
           <span class="date">{{ comment.commentTime | date:"Y-m-d H:i:s" }}</span>
         </div>
@@ -119,10 +119,12 @@
         {% for reply in comment.root_comment.all %}
         <div class="comment">
           <a class="avatar">
-            <img src="../images/avatar/small/jenny.jpg">
+            <img src="{{ reply.user.head.url }}">
           </a>
           <div class="content">
-            <a class="author"> {{ reply.user.username }}  回复：{{ reply.reply_to.username }}</a>
+            <a class="author">
+              {% if reply.user.nickname %} {{ reply.user.nickname }}{% else %}用户{{ reply.user.uid | slice:"-5:" }}{% endif %}  <span class="ui sub grey header">回复：
+              {% if reply.reply_to.nickname %} {{ reply.reply_to.nickname }}{% else %}用户{{ reply.reply_to.uid | slice:"-5:" }}{% endif %}</span></a>
             <div class="metadata">
               <span class="date">{{ reply.commentTime | date:"Y-m-d H:i:s"}}</span>
             </div>
@@ -228,9 +230,8 @@ function likeChange(obj,content_type,object_id) {
         var liked_num = $(obj.getElementsByTagName('a'));
         liked_num.text(data['like_num']);
       }else {
-        $('.ui.modal')
-  .modal('show')
-;
+        {#$('.ui.modal').modal('show');#}
+        alert("请先登录")
       }
     },
     error:function (xhr) {

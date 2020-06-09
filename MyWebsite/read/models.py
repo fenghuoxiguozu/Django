@@ -3,6 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models.fields import exceptions
 from django.utils import timezone
+from django.conf import settings
 
 # Create your models here.
 class ReadNum(models.Model):
@@ -23,6 +24,7 @@ class ReadDetail(models.Model):
     content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type','object_id')
+    # readUser = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'ReadDetailNum'

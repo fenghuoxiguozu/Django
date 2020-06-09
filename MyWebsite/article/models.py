@@ -39,6 +39,9 @@ class Article(models.Model,ReadNumMethod):
         verbose_name = 'Article'
         verbose_name_plural = '文章详情'
 
+    def get_author(self):
+        return self.author
+
     def __str__(self):
         return self.title
 
